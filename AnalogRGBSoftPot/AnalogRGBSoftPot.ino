@@ -38,6 +38,8 @@ const float refY = 32767 / (float)900;
 #define POTMAX 920
 const int ROWPINS[] = {2, 3, 4};
 int oVal[SLIDERS];
+// oTouched could be a byte, using it's bits (to save a few bytes of ram)
+bool oTouched[SLIDERS];
 
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(8, NEOPXPIN, NEO_GRB + NEO_KHZ800);
 
@@ -84,7 +86,10 @@ void loop() {
     digitalWrite(ROWPINS[i], LOW);
 
     // check if it is within pot detection (is touched) and value is changed from before.
-    if (sv[i] >= POTDETECT && sv[i] != oVal[i]) {
+    // save touched state, and only do updates if there was a touch last loop,
+    //   it works as a debounce to prevent random 1-time weird data reads.
+    bool hasTouch = (sv[i] >= POTDETECT && sv[i] != oVal[i]);
+    if (hasTouch && oTouched[i]) {
       oVal[i] = sv[i];
       // clamp the new value within MIN and MAX
       if (oVal[i] < POTMIN) oVal[i] = POTMIN;
@@ -93,6 +98,7 @@ void loop() {
       // use absolute mouse to move cursor to a pixel position (based on defined screen resolution)
       setRefPos(250 + oVal[i], 200 + 150 * i);
     }
+    oTouched[i] = hasTouch;
   }
 
   int ledv[SLIDERS];
