@@ -16,12 +16,29 @@ const String kmap[][4] = {
   {"7", "8", "9", "C"},
   {"*", "0", "#", "D"},
 };
-const KeyboardKeycode kkmap[][4] = {
+/* const KeyboardKeycode kkmap[][4] = {
   {KEYPAD_1, KEYPAD_2, KEYPAD_3, KEYPAD_DIVIDE},
   {KEYPAD_4, KEYPAD_5, KEYPAD_6, KEYPAD_MULTIPLY},
   {KEYPAD_7, KEYPAD_8, KEYPAD_9, KEYPAD_SUBTRACT},
   {KEY_PERIOD, KEYPAD_0, KEYPAD_ENTER, KEYPAD_ADD},
-}; // we want a . (dot) more often then a KEPAD_DOT which is , (comma) on swedish layout
+}; // . (dot) is wanted more often then a KEPAD_DOT which is , (comma) on swedish layout
+/*   
+ | | |  |   _________
+ | | |   \ /
+ | | |    0    ______
+ | |  \ /   \ /
+ | |   3     7   ____
+ |  \ / \   / \ /
+ |   2    5    8   __
+  \ / \  / \  / \ /
+   1    4   6    9
+*/
+const KeyboardKeycode kkmap[][4] = {
+  {KEY_0, KEY_3, KEY_2, KEY_1},
+  {KEY_7, KEY_5, KEY_4, KEY_PERIOD},
+  {KEY_8, KEY_6, KEY_PERIOD, KEY_PERIOD},
+  {KEY_9, KEY_PERIOD, KEY_PERIOD, KEY_PERIOD},
+};
 
 void setup() {
   // Sends a clean report to the host. This is important on any Arduino type.
@@ -112,5 +129,6 @@ void loop() {
       }
     }
     lpressed = pressed;
+    delay(20);
   }
 }
