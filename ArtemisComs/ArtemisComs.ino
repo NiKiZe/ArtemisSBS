@@ -10,12 +10,12 @@ const int pins[] = {2, 3, 4, 5, 6, 7, 8, 9};
   1 - 7 8 9 C
   0 - * 0 # D
 */
-const String kmap[][4] = {
+/*const String kmap[][4] = {
   {"1", "2", "3", "A"},
   {"4", "5", "6", "B"},
   {"7", "8", "9", "C"},
   {"*", "0", "#", "D"},
-};
+};*/
 /* const KeyboardKeycode kkmap[][4] = {
   {KEYPAD_1, KEYPAD_2, KEYPAD_3, KEYPAD_DIVIDE},
   {KEYPAD_4, KEYPAD_5, KEYPAD_6, KEYPAD_MULTIPLY},
@@ -114,13 +114,7 @@ void loop() {
       if ((change & z) == z) {
         // this seemed nice to have (but creates a different HID device)
         Keyboard.wakeupHost();
-        uint8_t leds = BootKeyboard.getLeds();
-        // ensure we always have numlock on
-        if (!(leds & LED_NUM_LOCK)) {
-          Serial.println("leds: " + String(leds, BIN));
-          BootKeyboard.write(KEY_NUM_LOCK);
-        }
-        Serial.println(" " + kmap[x][y] + " " + (((pressed & z) == z) ? "pressed" : "released"));
+        // Serial.println(" " + kmap[x][y] + " " + (((pressed & z) == z) ? "pressed" : "released"));
         KeyboardKeycode k = kkmap[x][y];
         if ((pressed & z) == z)
           BootKeyboard.press(k);
