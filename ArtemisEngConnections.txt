@@ -1,0 +1,32 @@
+  +--------------  Coolant Down Row ------------------------------------ >o  14
+  |     +--------  Coolant Up Row   ------------------------------------ >o  15
+  |     |  +-----  Analog Read Row  ------------------------------------ >o  A0
+  |     |  |   (see diodes in sketch)  Presets 
+  |     |  |                           +-----------  Preset Row 1 ------ >o  16
+  |     |  |                           |       +---  Preset Row 2 ------ >o  10
+###########  ----  Channel 1 Col ----- 1 ----- Shift (Store)
+  o  x  o  |                           |       |
+  |     |  |                           |       |
+###########  ----  Channel 2 Col ----- 2       |
+  o  x  o  |                           |       |
+  |     |  |                           |       |
+###########  ----  Channel 3 Col ----- 3       |
+  o  x  o  |                           |       |
+  |     |  |                           |       |
+###########  ----  Channel 4 Col ----- 4       |
+  o  x  o  |                           |       |
+  |     |  |                           |       |
+###########  ----  Channel 5 Col ----- 5 ----- Space (Reset Coolant)
+  o  x  o  |                           |       |
+  |     |  |                           |       |       
+###########  ----  Channel 6 Col ----- 6 ----- Enter (Reset Energy)
+  o  x  o  |                           |       |
+  |     |  |                           |       |       
+###########  ----  Channel 7 Col ----- 7 ----- 9
+  o  x  o  |                           |       |
+  |     |  |                           |       |       
+###########  ----  Channel 8 Col ----- 8 ----- 0
+  o  x  o
+
+
+

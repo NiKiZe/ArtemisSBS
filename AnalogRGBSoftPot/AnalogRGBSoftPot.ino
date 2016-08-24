@@ -1,5 +1,6 @@
 #include <Adafruit_NeoPixel.h>
 
+// https://github.com/NicoHood/HID
 #include "HID-Project.h"
 
 /*
@@ -31,12 +32,14 @@
 const float refX = 32767 / (float)1600;
 const float refY = 32767 / (float)900;
 
-#define NEOPXPIN 6
-#define SLIDERS 3
+#define NEOPXPIN 0
+#define SLIDERS 8
 #define POTDETECT 16
 #define POTMIN 20
 #define POTMAX 920
-const int ROWPINS[] = {2, 3, 4};
+const int COLPINS[SLIDERS] = {2, 3, 4, 5, 6, 7, 8, 9};
+#define ROWS 4
+const int ROWPINS[ROWS] = {14, 15, 10, 16};
 int oVal[SLIDERS];
 // oTouched could be a byte, using it's bits (to save a few bytes of ram)
 bool oTouched[SLIDERS];
@@ -44,14 +47,22 @@ bool oTouched[SLIDERS];
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(8, NEOPXPIN, NEO_GRB + NEO_KHZ800);
 
 void setup() {
+  // Sends a clean report to the host. This is important on any Arduino type.
+  BootKeyboard.begin();
+  AbsoluteMouse.begin();
+
   strip.begin();
 
   // initialize serial communications at 9600 bps:
   Serial.begin(9600);
-  AbsoluteMouse.begin();
+
+  for (int i = 0; i < ROWS; i++) {
+    pinMode(ROWPINS[i], INPUT_PULLUP);
+  }
+
   // initialize base slider pos (non touched base value)
   for (int i = 0; i < SLIDERS; i++) {
-    pinMode(ROWPINS[i], OUTPUT);
+    pinMode(COLPINS[i], OUTPUT);
     oVal[i] = POTMIN;
   }
 }
@@ -73,17 +84,41 @@ void setRefPos(int x, int y) {
   setPos(refX * x, refY * y);
 }
 
+String bin_string(uint64_t v) {
+  // this is less then suboptimal code
+  String ret = "";
+  for (int i = 31; i >= 0; i--) {
+    ret += String((int)((v >> (i )) & 0x1), HEX);
+    if (i > 0 && i % 4 == 0) ret += " ";
+  }
+  return ret;
+}
+
 void loop() {
   int sv[SLIDERS];
   bool hasChange = false;
 
+  byte samplemask = 0;
+  byte rsamples[SLIDERS];
   // walk each output rows selector ..
   for (int i = 0; i < SLIDERS; i++) {
-    digitalWrite(ROWPINS[i], HIGH);
+    digitalWrite(COLPINS[i], HIGH);
+
+    // check if any row pin is forced low
+    byte sample = 0;
+    for (int ii = 0; ii < ROWS; ii++) {
+      sample = sample << 1;
+      if (!digitalRead(ROWPINS[ii])) {
+        sample |= 0x1;
+      }
+    }
+    samplemask |= sample;
+    rsamples[i] = sample;
+
     // ... waiting a litle bit for ADC to settle and read analog value.
     delay(2);
     sv[i] = analogRead(A0);
-    digitalWrite(ROWPINS[i], LOW);
+    digitalWrite(COLPINS[i], LOW);
 
     // check if it is within pot detection (is touched) and value is changed from before.
     // save touched state, and only do updates if there was a touch last loop,
@@ -96,10 +131,24 @@ void loop() {
       if (oVal[i] > POTMAX) oVal[i] = POTMAX;
       hasChange = true;
       // use absolute mouse to move cursor to a pixel position (based on defined screen resolution)
-      setRefPos(250 + oVal[i], 200 + 150 * i);
+      setRefPos(94 + 150 * i, 900 - 50 - map(oVal[i], POTMIN, POTMAX, 0, 200));
     }
     oTouched[i] = hasTouch;
   }
+  uint32_t state = 0;
+  for (int i = 0; i < SLIDERS; i++) {
+    byte sample = rsamples[i] ^ samplemask;
+    state = state << 0x4;
+    if (sample) {
+      state |= sample & 0xf;
+    }
+  }
+  static uint32_t laststate = 0;
+  // debounce by only using state if it is the same state as last loop
+  if (state && state == laststate) {
+    Serial.println(bin_string(state));
+  }
+  laststate = state;
 
   int ledv[SLIDERS];
   if (hasChange) {
@@ -111,7 +160,7 @@ void loop() {
       Serial.print("\t: ");
       Serial.print(oVal[i]);
       Serial.print(" = ");
-      ledv[i] = map(oVal[i], POTMIN, POTMAX, 0, 255);
+      ledv[i] = map(oVal[i], POTMIN, POTMAX, 0, 16);
       Serial.print(ledv[i]);
       Serial.print("\t");
     }
