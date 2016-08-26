@@ -29,8 +29,16 @@
    by only detecting between POTMIN and POTMAX
 */
 
-const float refX = 32767 / (float)1600;
-const float refY = 32767 / (float)900;
+const float refX = 32767 / (float)1366;
+const float refY = 32767 / (float)768;
+
+#define X_SLIDE 50
+#define X_COOL 94
+#define X_SPACE 168
+#define Y_SLIDETOP 502
+#define Y_SLIDEBOT 748
+#define Y_COOLUP 535
+#define Y_COOLDOWN 745
 
 #define NEOPXPIN 0
 #define SLIDERS 8
@@ -74,14 +82,23 @@ void colorWipe(uint32_t c) {
   strip.show();
 }
 
-void setPos(int x, int y) {
-  //Serial.println("Moving to " + String(x) + ", " + String(y));
+void setPos(int x, int y, bool press = false) {
+  //Serial.println("Moving to " + String(x) + ", " + String(y) + String(press ? " pressed" : ""));
   AbsoluteMouse.moveTo(x, y);
+  if (press)
+    AbsoluteMouse.press();
 }
 
-void setRefPos(int x, int y) {
-  //Serial.println("Moving to ref " + String(x) + ", " + String(y));
-  setPos(refX * x, refY * y);
+void setRefPos(int x, int y, bool press = false) {
+  //Serial.println("Moving to ref " + String(x) + ", " + String(y) + String(press ? " pressed" : ""));
+  setPos(refX * x, refY * y, press);
+}
+
+void key(KeyboardKeycode k, bool pres) {
+  if (pres)
+    BootKeyboard.press(k);
+  else
+    BootKeyboard.release(k);
 }
 
 String bin_string(uint64_t v) {
@@ -131,10 +148,13 @@ void loop() {
       if (oVal[i] > POTMAX) oVal[i] = POTMAX;
       hasChange = true;
       // use absolute mouse to move cursor to a pixel position (based on defined screen resolution)
-      setRefPos(94 + 150 * i, 900 - 50 - map(oVal[i], POTMIN, POTMAX, 0, 200));
+      setRefPos(X_SLIDE + X_SPACE * i, map(oVal[i], POTMIN, POTMAX, Y_SLIDEBOT, Y_SLIDETOP), true);
     }
     oTouched[i] = hasTouch;
   }
+  if (!hasChange && AbsoluteMouse.isPressed())
+    AbsoluteMouse.release();
+
   uint32_t state = 0;
   for (int i = 0; i < SLIDERS; i++) {
     byte sample = rsamples[i] ^ samplemask;
@@ -144,9 +164,66 @@ void loop() {
     }
   }
   static uint32_t laststate = 0;
+  static uint32_t lastpressed = 0;
   // debounce by only using state if it is the same state as last loop
-  if (state && state == laststate) {
+  if (state == laststate && state != lastpressed) {
     Serial.println(bin_string(state));
+    uint32_t change = lastpressed ^ state;
+    for (int i = 0; i < SLIDERS; i++) {
+      byte sample = state >> (0x4 * (SLIDERS - 1 - i)) & 0xf;
+      byte changed = change >> (0x4 * (SLIDERS - 1 - i)) & 0xf;
+      if (changed) {
+        if (changed & B1000) {
+          Serial.println(" Cool " + String(i) + " down " + (sample & B1000 ? "pressed" : "released"));
+          if (sample & B1000) {
+            setRefPos(X_COOL + X_SPACE * i, Y_COOLDOWN);
+            AbsoluteMouse.click();
+          }
+          changed ^= B1000;
+        }
+        if (changed & B0100) {
+          Serial.println(" Cool " + String(i) + " up " + (sample & B0100 ? "pressed" : "released"));
+          if (sample & B0100) {
+            setRefPos(X_COOL + X_SPACE * i, Y_COOLUP);
+            AbsoluteMouse.click();
+          }
+          changed ^= B0100;
+        }
+        if (changed & B0001) {
+          Serial.println(" preset " + String(i + 1) + " " + (sample & B0001 ? "pressed" : "released"));
+          key((KeyboardKeycode)(KEY_1 + i), sample & B0001);
+          changed ^= B0001;
+        }
+        if (changed & B0010 && i >= 6 && i <= 7) {
+          Serial.println(" preset " + String(i + 2) + " " + (sample & B0010 ? "pressed" : "released"));
+          key((KeyboardKeycode)(KEY_1 + i + 2), sample & B0010);
+          changed ^= B0010;
+        }
+        if (changed & B0010 && i == 0) {
+          Serial.println(" shift " + String(sample & B0010 ? "pressed" : "released"));
+          key(KEY_LEFT_SHIFT, sample & B0010);
+          changed ^= B0010;
+        }
+        if (changed & B0010 && i == 4) {
+          Serial.println(" enter " + String(sample & B0010 ? "pressed" : "released"));
+          key(KEY_ENTER, sample & B0010);
+          changed ^= B0010;
+        }
+        if (changed & B0010 && i == 5) {
+          Serial.println(" space " + String(sample & B0010 ? "pressed" : "released"));
+          key(KEY_SPACE, sample & B0010);
+          changed ^= B0010;
+        }
+        if (changed) {
+          Serial.print(i);
+          Serial.print("   ");
+          Serial.print(changed, HEX);
+          Serial.print("   ");
+          Serial.println(sample, HEX);
+        }
+      }
+    }
+    lastpressed = state;
   }
   laststate = state;
 
