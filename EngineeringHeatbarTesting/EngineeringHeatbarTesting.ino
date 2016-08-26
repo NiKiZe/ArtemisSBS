@@ -1,8 +1,8 @@
-#include "SPI.h"
-#include "WS2801.h"
+#include "Adafruit_WS2801.h"
+#include "SPI.h" // Comment out this line if using Trinket or Gemma
 
 /*****************************************************************************
-Engineering Heatbar Testing by Stugo
+  Engineering Heatbar Testing by Stugo
 *****************************************************************************/
 
 // Choose which 2 pins you will use for output.
@@ -10,31 +10,28 @@ Engineering Heatbar Testing by Stugo
 // The colors of the wires may be totally different so
 // BE SURE TO CHECK YOUR PIXELS TO SEE WHICH WIRES TO USE!
 // My wires, green = data, blue = clock, yellow = gnd, red = 5V
-int dataPin = 2;
-int clockPin = 3;
+#define dataPin 2
+#define clockPin 3
 // Don't forget to connect the ground wire to Arduino ground,
 // and the +5V wire to a +5V supply
 // format for strip.setPixelColor(Pixelnuber, r, g, b);
 
-const int numPixels = 20;  //  20 = 20 pixels in a row
+#define numPixels 20  //  20 = 20 pixels in a row
 
 // Set the first variable to the NUMBER of pixels.
-WS2801 strip = WS2801(numPixels, dataPin, clockPin);
+Adafruit_WS2801 strip = Adafruit_WS2801(numPixels, dataPin, clockPin);
 
 // Variables will change:
-int flashing = false;             // start with flashing off
-int ledState = 0;              // leds off
+bool overheat = false;             // start with flashing off
+bool ledState = false;              // leds off
 
 // the follow variables is a long because the time, measured in miliseconds,
 // will quickly become a bigger number than can be stored in an int.
 long previousMillis = 0;        // will store last time LEDs was updated
-long interval = 200;           // interval at which to blink (milliseconds)
+#define interval 200           // interval at which to blink (milliseconds)
 
-int stations[] = {
-  1, 1, 1, 1, 1, 1, 1, 1 };
-int numStations = 8;
-int nbr = 0;
-
+#define numStations 8
+int stations[numStations] = { 1, 1, 1, 1, 1, 1, 1, 1 };
 
 void setup() {
   // Open serial connection.
@@ -43,131 +40,89 @@ void setup() {
 
   // Update LED contents, to start they are all 'off'
   strip.show();
-
 }
 
 void loop() {
   // Flashing timer
-  if(flashing == true){
+  if (overheat) {
     unsigned long currentMillis = millis();
- 
-    if(currentMillis - previousMillis > interval) {
-      // save the last time you blinked the LED 
-       previousMillis = currentMillis;   
+
+    if (currentMillis - previousMillis > interval) {
+      // save the last time you blinked the LED
+      previousMillis = currentMillis;
 
       // if the LED is off turn it on and vice-versa:
-      if (ledState == 0){
-        ledState = 1;
+      if (!ledState) {
         flash_on();
-        }
-      else{
-        ledState = 0;
-        flash_off();
-        }
       }
+      else {
+        flash_off();
+      }
+      ledState = !ledState;
+    }
   }
   // Make sure flashing-LEDs are off if no flashing
-  else if(flashing == false){
-    ledState = 0;
+  else {
+    ledState = false;
     flash_off();
   }
-  
-  // Reset overheat
-  int overheat[] = {
-  0, 0, 0, 0, 0, 0, 0, 0,};
-  
+
   // Reset flashing
-  flashing = false;
-  
-  //Read Serial
-  if(Serial.available() > 0 ){
-    for (int i=0; i < 8; i++){
-    stations[i] = Serial.parseInt();
+  overheat = false;
+
+  //Read Serial and update leds
+  if (Serial.available() > 0 ) {
+    for (int stationNo = 0; stationNo < numStations && Serial.available() > 0; stationNo++) {
+      stations[stationNo] = Serial.parseInt();
+      Serial.print(stations[stationNo]);
+      if (stations[stationNo] == 1) {     //white
+        strip.setPixelColor(stationNo, 128, 128, 128);
+      }
+      else if (stations[stationNo] == 2) {   //blue
+        strip.setPixelColor(stationNo, 0, 0, 128);
+      }
+      else if (stations[stationNo] == 3) {   //green
+        strip.setPixelColor(stationNo, 0, 128, 0);
+      }
+      else if (stations[stationNo] == 4) {   //orange
+        strip.setPixelColor(stationNo, 128, 64, 0);
+      }
+      else if (stations[stationNo] == 5) {   //red
+        strip.setPixelColor(stationNo, 128, 0, 0);
+        overheat = true;
+      }
+      else {           //fail
+        strip.setPixelColor(stationNo, 128, 0, 128);     //purple
+      }
     }
+    strip.show();
   }
+  Serial.println();
+
   //Clear Serial
   flushReceive();
-  
-  // Update the leds  
-  for (int thisStation = 0; thisStation < numStations; thisStation++) {
-    nbr = thisStation;
-    if (stations[thisStation] == 1){      //white
-      strip.setPixelColor(nbr, 128, 128, 128);
-      strip.show();
-      }
-    else if (stations[thisStation] == 2){    //blue
-      strip.setPixelColor(nbr, 0, 0, 128);
-      strip.show();
-    }
-    else if (stations[thisStation] == 3){    //green
-      strip.setPixelColor(nbr, 0, 128, 0);
-      strip.show();
-    }
-    else if (stations[thisStation] == 4){    //orange
-      strip.setPixelColor(nbr, 128, 64, 0);
-      strip.show();
-    }
-    else if (stations[thisStation] == 5){    //red
-      strip.setPixelColor(nbr, 128, 0, 0);
-      strip.show();
-      overheat[nbr] = 1;
-    }
-    else {           //fail
-      strip.setPixelColor(nbr, 128, 0, 128);     //purple
-      strip.show(); 
-    } 
-  }
-  
-  //Check for overheat
-  for (int thisLED = 0; thisLED < numStations; thisLED++){
-    if (overheat[thisLED] == 1)
-      flashing = true;
-  }
-  /*
-  // Print stations[] debug
-  for (int a=0; a < 8; a++){
-    if (a <= 6){
-      Serial.print(stations[a]);
-      }
-    else if (a == 7){
-      Serial.println(stations[a]);
-      }
-  }
-  delay(500);  */
 }    //End of loop
 
 
 //Turn leds 8 < numPixels on (white)
 void flash_on() {
-  
-  for (int i=8; i<numPixels; i++){
+  for (int i = numStations; i < numPixels; i++) {
     strip.setPixelColor(i, 128, 0, 0);
-    strip.show();
   }
+  strip.show();
 }
 
 //Turn leds 8 < numPixels off
-void flash_off(){
-  for (int i=8; i<numPixels; i++){
+void flash_off() {
+  for (int i = numStations; i < numPixels; i++) {
     strip.setPixelColor(i, 0, 0, 0);
-    strip.show();
   }
+  strip.show();
 }
 
 // Clear Serialbuffer
-void flushReceive(){
-  while(Serial.available())
+void flushReceive() {
+  while (Serial.available())
     Serial.read();
 }
 
-// Create a 24 bit color value from R,G,B
-uint32_t Color(byte r, byte g, byte b)
-{
-  uint32_t c;
-  c = r;
-  c <<= 8;
-  c |= g;
-  c <<= 8;
-  c |= b;
-  return c;
-}
