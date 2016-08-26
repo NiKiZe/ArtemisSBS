@@ -131,56 +131,57 @@ if __name__ == '__main__':
 
     # Get the pixel resolution of main screen
     res = (GetSystemMetrics (0), GetSystemMetrics (1))
+    width, height = res
 
     #Sets the coordinates
     COOLX = 94          # X coordinate to the center of the first blue coolant arrow
     SLIDEX = 50         # X coordinate to the center of the first energy-slider
     HEATX = 84          # X coordinate to the center of the first beatbar
-    if res == (1366, 768):
-        COOLXSPACE = 168    # Spacing in X between coolant systems
+    COOLXSPACE = int((width - 24) / 8)    # Spacing in X between coolant systems
+    if width == 1024:
+        COOLXSPACE = 125
+    elif width == 1366:
+        COOLXSPACE = 168
+    elif width == 1280:
+        COOLXSPACE = 157
+    elif width == 1920:
+        COOLXSPACE = 237
+    SLIDESPACE = COOLXSPACE    # Spacing in X between energy-sliders
+    HEATSPACE = COOLXSPACE     # Spacing in X between heatbars
+
+    COOLYUP = int(724.0 / 1080 * height)      # Y coordinate to the center of a blue coolant up-arrow
+    COOLYDOWN = int(1059.0 / 1080 * height)     # Y coordinate to the center of a blue coolant down-arrow
+    SLIDETOP = int(692.0 / 1080 * height)    # Y coordinate to the top of a energy-slider
+    SLIDEBOT = int(1050.0 / 1080 * height)    # Y coordinate to the bottom of a energy-slider
+    HEATTOP = int(652.0 / 1080 * height)       # Y coordinate to the top of a heatbar
+    HEATBOT = int(693.0 / 1080 * height)       # Y coordinate to the bottom of a heatbar
+
+    if height == 768:
         COOLYUP = 535       # Y coordinate to the center of a blue coolant up-arrow
         COOLYDOWN = 745     # Y coordinate to the center of a blue coolant down-arrow
-        SLIDETOP = 525    # Y coordinate to the top of a energy-slider
-        SLIDEBOT = 725    # Y coordinate to the bottom of a energy-slider
-        SLIDESPACE = COOLXSPACE    # Spacing in X between energy-sliders
+        SLIDETOP = 502    # Y coordinate to the top of a energy-slider
+        SLIDEBOT = 748    # Y coordinate to the bottom of a energy-slider
         HEATTOP = 464       # Y coordinate to the top of a heatbar
         HEATBOT = 503       # Y coordinate to the bottom of a heatbar
-        HEATSPACE = COOLXSPACE     # Spacing in X between heatbars
-        print("%ix%i is selected" % res)
-    elif res == (1280, 800):
-        COOLXSPACE = 157
+    elif height == 800:
         COOLYUP = 555
         COOLYDOWN = 780
         SLIDETOP = 543
         SLIDEBOT = 755
-        SLIDESPACE = COOLXSPACE
         HEATTOP = 485
         HEATBOT = 523
-        HEATSPACE = COOLXSPACE
-        print("%ix%i is selected" % res)
-    elif res == (1920, 1080):
-        COOLXSPACE = 237
+    elif height == 1080:
         COOLYUP = 724
         COOLYDOWN = 1059
         SLIDETOP = 692
         SLIDEBOT = 1050
-        SLIDESPACE = COOLXSPACE
         HEATTOP = 652
         HEATBOT = 693
-        HEATSPACE = COOLXSPACE
+
+    if res in ((1024, 768),(1366, 768),(1280, 800),(1920, 1080)):
         print("%ix%i is selected" % res)
     else:
         print("Screen resolution %ix%i is not tested, using scaled values." % res)
-        width, height = res
-        COOLXSPACE = int((width - 24) / 8)    # Spacing in X between coolant systems
-        COOLYUP = int(724.0 / 1080 * height)      # Y coordinate to the center of a blue coolant up-arrow
-        COOLYDOWN = int(1059.0 / 1080 * height)     # Y coordinate to the center of a blue coolant down-arrow
-        SLIDETOP = int(692.0 / 1080 * height)    # Y coordinate to the top of a energy-slider
-        SLIDEBOT = int(1050.0 / 1080 * height)    # Y coordinate to the bottom of a energy-slider
-        SLIDESPACE = COOLXSPACE    # Spacing in X between energy-sliders
-        HEATTOP = int(652.0 / 1080 * height)       # Y coordinate to the top of a heatbar
-        HEATBOT = int(693.0 / 1080 * height)       # Y coordinate to the bottom of a heatbar
-        HEATSPACE = COOLXSPACE     # Spacing in X between heatbars
     print(COOLX, COOLXSPACE, COOLYUP, COOLYDOWN, SLIDETOP, SLIDEBOT, SLIDEX, SLIDESPACE, HEATTOP, HEATBOT, HEATX, HEATSPACE)
 
 
@@ -200,15 +201,14 @@ if __name__ == '__main__':
     # Count the joysticks:
     joystickCount = pygame.joystick.get_count()
 
-    if joystickCount == 0:
-        print("Sorry, no joysticks were found!")
-
-    else:
+    print("Joystick count: %i" % joystickCount)
+    if joystickCount > 0:
         myJoy = pygame.joystick.Joystick(0)
         myJoy.init()
-        print("Joystick name: ", myJoy.get_name())
-        print("Joystick id: ", myJoy.get_id())
-        print("Number of buttons: ", myJoy.get_numbuttons())
+        print("Joystick name: %s" % myJoy.get_name())
+        print("Joystick id: %i" % myJoy.get_id())
+        print("Joystick axis: %i" % myJoy.get_numaxes())
+        print("Number of buttons: %i" % myJoy.get_numbuttons())
 
     # open the serial port that your arduino
     # is connected to.
