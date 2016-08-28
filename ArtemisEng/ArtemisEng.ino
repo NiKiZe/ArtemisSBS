@@ -1,4 +1,5 @@
 #include <Adafruit_NeoPixel.h>
+#include "Adafruit_WS2801.h"
 
 // https://github.com/NicoHood/HID
 #include "HID-Project.h"
@@ -45,21 +46,42 @@ const float refY = 32767 / (float)768;
 #define POTDETECT 16
 #define POTMIN 20
 #define POTMAX 920
-const int COLPINS[SLIDERS] = {2, 3, 4, 5, 6, 7, 8, 9};
+const uint8_t COLPINS[SLIDERS] = {2, 3, 4, 5, 6, 7, 8, 9};
 #define ROWS 4
-const int ROWPINS[ROWS] = {14, 15, 10, 16};
-int oVal[SLIDERS];
+const uint8_t ROWPINS[ROWS] = {14, 15, 10, 16};
+uint16_t oVal[SLIDERS];
 // oTouched could be a byte, using it's bits (to save a few bytes of ram)
 bool oTouched[SLIDERS];
 
-Adafruit_NeoPixel stripc = Adafruit_NeoPixel(8, NEOPXPIN, NEO_GRB + NEO_KHZ800);
+uint8_t coolant[SLIDERS];
+Adafruit_NeoPixel cstrip = Adafruit_NeoPixel(8, NEOPXPIN, NEO_GRB + NEO_KHZ800);
+
+#define WSDATAPIN 20
+#define WSCLOCKPIN 21
+#define WSNUMPIXELS 20
+Adafruit_WS2801 hstrip = Adafruit_WS2801(WSNUMPIXELS, WSDATAPIN, WSCLOCKPIN);
+
+// Variables will change:
+bool overheat = false;             // start with flashing off
+bool ledState = false;              // leds off
+long previousMillis = 0;        // will store last time LEDs was updated
+#define interval 200           // interval at which to blink (milliseconds)
+uint8_t stations[SLIDERS] = { 1, 1, 1, 1, 1, 1, 1, 1 };
+
+void reset_coolant() {
+  for (int i = 0; i < SLIDERS; i++) {
+    coolant[i] = 0;
+  }
+}
 
 void setup() {
   // Sends a clean report to the host. This is important on any Arduino type.
   BootKeyboard.begin();
   AbsoluteMouse.begin();
 
-  stripc.begin();
+  cstrip.begin();
+  hstrip.begin();
+  hstrip.show();
 
   // initialize serial communications at 9600 bps:
   Serial.begin(9600);
@@ -73,13 +95,6 @@ void setup() {
     pinMode(COLPINS[i], OUTPUT);
     oVal[i] = POTMIN;
   }
-}
-
-void colorWipe(uint32_t c) {
-  for (uint16_t i = 0; i < stripc.numPixels(); i++) {
-    stripc.setPixelColor(i, c);
-  }
-  stripc.show();
 }
 
 void setPos(int x, int y, bool press = false) {
@@ -109,6 +124,85 @@ String bin_string(uint64_t v) {
     if (i > 0 && i % 4 == 0) ret += " ";
   }
   return ret;
+}
+
+void flash_rgb(byte r, byte g, byte b) {
+  for (int i = SLIDERS; i < WSNUMPIXELS; i++) {
+    hstrip.setPixelColor(i, r, g, b);
+  }
+  hstrip.show();
+}
+
+// Clear Serialbuffer
+void flushReceive() {
+  while (Serial.available() > 0)
+    Serial.read();
+}
+
+void do_flash() {
+  // Flashing timer
+  if (overheat) {
+    unsigned long currentMillis = millis();
+
+    if (currentMillis - previousMillis > interval) {
+      // save the last time you blinked the LED
+      previousMillis = currentMillis;
+
+      // if the LED is off turn it on and vice-versa:
+      ledState = !ledState;
+      flash_rgb(ledState ? 128 : 0, 0, 0);
+    }
+  }
+  // Make sure flashing-LEDs are off if no flashing
+  else if(ledState) {
+    ledState = false;
+    flash_rgb(0, 0, 0);
+  }
+}
+
+void read_coolant() {
+  //Read Serial and update leds
+  if (Serial.available() > 0 ) {
+    // Reset flashing
+    overheat = false;
+    for (int stationNo = 0; stationNo < SLIDERS && Serial.available() > 0; stationNo++) {
+      int cur = Serial.parseInt();
+      stations[stationNo] = cur;
+      Serial.print(cur);
+      if (cur == 0) {   //off
+        hstrip.setPixelColor(stationNo, 0, 0, 0);
+      }
+      else if (cur == 1) {     //white
+        hstrip.setPixelColor(stationNo, 128, 128, 128);
+      }
+      else if (cur == 2) {   //blue
+        hstrip.setPixelColor(stationNo, 0, 0, 128);
+      }
+      else if (cur == 3) {   //green
+        hstrip.setPixelColor(stationNo, 0, 128, 0);
+      }
+      else if (cur == 4) {   //orange
+        hstrip.setPixelColor(stationNo, 128, 64, 0);
+      }
+      else if (cur == 5) {   //red
+        hstrip.setPixelColor(stationNo, 128, 0, 0);
+        overheat = true;
+      }
+      else {           //fail
+        hstrip.setPixelColor(stationNo, 128, 0, 128);     //purple
+      }
+      Serial.print(",");
+    }
+    hstrip.show();
+    int av = Serial.available();
+    if (av > 0) {
+      Serial.print("Clear available: ");
+      Serial.print(av);
+      //Clear Serial
+      flushReceive();
+    }
+    Serial.println();
+  }
 }
 
 void loop() {
@@ -178,6 +272,10 @@ void loop() {
           if (sample & B1000) {
             setRefPos(X_COOL + X_SPACE * i, Y_COOLDOWN);
             AbsoluteMouse.click();
+            if (coolant[i] > 0) {
+              coolant[i]--;
+              hasChange = true;
+            }
           }
           changed ^= B1000;
         }
@@ -186,6 +284,10 @@ void loop() {
           if (sample & B0100) {
             setRefPos(X_COOL + X_SPACE * i, Y_COOLUP);
             AbsoluteMouse.click();
+            if (coolant[i] < 8) {
+              coolant[i]++;
+              hasChange = true;
+            }
           }
           changed ^= B0100;
         }
@@ -208,6 +310,8 @@ void loop() {
           Serial.println(" enter " + String(sample & B0010 ? "pressed" : "released"));
           key(KEY_ENTER, sample & B0010);
           changed ^= B0010;
+          reset_coolant();
+          hasChange = true;
         }
         if (changed & B0010 && i == 5) {
           Serial.println(" space " + String(sample & B0010 ? "pressed" : "released"));
@@ -227,7 +331,9 @@ void loop() {
   }
   laststate = state;
 
-  int ledv[SLIDERS];
+  read_coolant();
+  do_flash();
+
   if (hasChange) {
     // print a timestamp followed by each sliders (current analog, last analog, and mapped) value
     Serial.print(millis());
@@ -236,13 +342,11 @@ void loop() {
       Serial.print(sv[i]);
       Serial.print("\t: ");
       Serial.print(oVal[i]);
-      Serial.print(" = ");
-      ledv[i] = map(oVal[i], POTMIN, POTMAX, 0, 16);
-      Serial.print(ledv[i]);
       Serial.print("\t");
+      // update color of neopixel for strip
+      cstrip.setPixelColor(i, cstrip.Color(map(oVal[i], POTMIN, POTMAX, 0, 8 * 16), 0, coolant[i] * 16));
     }
     Serial.println();
-    // change color of neopixel strip
-    colorWipe(stripc.Color(ledv[0], ledv[1], ledv[2]));
+    cstrip.show();
   }
 }
