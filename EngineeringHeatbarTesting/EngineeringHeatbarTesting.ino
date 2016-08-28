@@ -70,7 +70,10 @@ void loop() {
       int cur = Serial.parseInt();
       stations[stationNo] = cur;
       Serial.print(cur);
-      if (cur == 1) {     //white
+      if (cur == 0) {   //off
+        hstrip.setPixelColor(stationNo, 0, 0, 0);
+      }
+      else if (cur == 1) {     //white
         hstrip.setPixelColor(stationNo, 128, 128, 128);
       }
       else if (cur == 2) {   //blue
