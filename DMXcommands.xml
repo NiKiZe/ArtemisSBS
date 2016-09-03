@@ -100,8 +100,6 @@
 			<setvalue index="0" value="0" change="0"></setvalue>			<!-- red value of first light box -->
 			<setvalue index="1" value="0" change="0"></setvalue>			<!-- green value of first light box -->
 			<setvalue index="2" value="0" change="0"></setvalue>			<!-- blue value of first light box -->
-
-			<setvalue index="6" value="255" change="0"></setvalue>			<!-- smoke -->
 		</timeblock>
 		<timeblock mseconds="600"></timeblock>
 		<timeblock mseconds="81">
@@ -124,8 +122,6 @@
 			<setvalue index="0" value="0" change="0"></setvalue>			<!-- red value of first light box -->
 			<setvalue index="1" value="0" change="0"></setvalue>			<!-- green value of first light box -->
 			<setvalue index="2" value="0" change="0"></setvalue>			<!-- blue value of first light box -->
-
-			<setvalue index="6" value="255" change="0"></setvalue>			<!-- smoke -->
 		</timeblock>
 		<timeblock mseconds="200"></timeblock>
 		<timeblock mseconds="81">
@@ -200,8 +196,23 @@
 			<setvalue index="0" value="0" change="0"></setvalue>			<!-- red value of first light box -->
 			<setvalue index="1" value="0" change="0"></setvalue>			<!-- green value of first light box -->
 			<setvalue index="2" value="0" change="0"></setvalue>			<!-- blue value of first light box -->
-
+		</timeblock>
+	</event>
+	<!-- ********************************************************************************************* -->
+	<event type="SOMETHING_HITS_PLAYER" if="SHIP_DAMAGE_20">
+		<!-- smoke when somethings hits and we have damage-->
+		<timeblock mseconds="1000">	</timeblock>
+		<timeblock mseconds="100">
 			<setvalue index="6" value="255" change="0"></setvalue>			<!-- smoke -->
 		</timeblock>
+		<timeblock mseconds="9900"></timeblock>
+	</event>
+	<!-- ********************************************************************************************* -->
+	<event type="PLAYER_TAKES_INTERNAL_DAMAGE">
+		<!-- smoke when somethings gets internal damage-->
+		<timeblock mseconds="500">
+			<setvalue index="6" value="255" change="0"></setvalue>			<!-- smoke -->
+		</timeblock>
+		<timeblock mseconds="19500"></timeblock>
 	</event>
 </DMX_CONTROL>
