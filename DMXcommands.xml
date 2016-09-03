@@ -10,6 +10,8 @@
 			<setvalue index="3" value="7" change="0"></setvalue>
 			<setvalue index="4" value="7" change="0"></setvalue>
 			<setvalue index="5" value="7" change="0"></setvalue>
+
+			<setvalue index="6" value="0" change="0"></setvalue>			<!-- smoke -->
 		</timeblock>
 	</event>
 	<!-- ********************************************************************************************* -->
@@ -99,8 +101,7 @@
 			<setvalue index="1" value="0" change="0"></setvalue>			<!-- green value of first light box -->
 			<setvalue index="2" value="0" change="0"></setvalue>			<!-- blue value of first light box -->
 
-			<setvalue index="6" value="255" change="0"></setvalue>
-			<!-- smoke -->
+			<setvalue index="6" value="255" change="0"></setvalue>			<!-- smoke -->
 		</timeblock>
 		<timeblock mseconds="200"></timeblock>
 		<timeblock mseconds="81">
