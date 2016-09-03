@@ -6,6 +6,8 @@
 #define RELAYPIN 4
 #define PixelCount 240
 
+#define HEX2(b) String((b >> 4) & 0xf, HEX) + String((b & 0xf), HEX)
+
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(PixelCount, NEOPIN, NEO_GRB + NEO_KHZ800);
 
 uint32_t const ColorArray[] = {
@@ -116,7 +118,7 @@ void loop()
     // read recent DMX values
     for (int i = 1; i <= PixelCount * 3 && i <= 512; i++) {
       byte b = DMXSerial.read(i);
-      out += String((b & 0xf0) >> 8, HEX) + String((b & 0xf), HEX);
+      out += HEX2(b);
       if ((i % 0x10) == 0)
         out += ' ';
       out += ' ';
