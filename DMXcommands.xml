@@ -4,12 +4,9 @@
 	<event type="NORMAL_CONDITION_1" continuous="yes">
 		<!-- steady soft white light -->
 		<timeblock mseconds="1000">
-			<setvalue index="0" value="100" change="0"></setvalue>
-			<!-- red value of first light box -->
-			<setvalue index="1" value="100" change="0"></setvalue>
-			<!-- green value of first light box -->
-			<setvalue index="2" value="100" change="0"></setvalue>
-			<!-- blue value of first light box -->
+			<setvalue index="0" value="100" change="0"></setvalue>			<!-- red value of first light box -->
+			<setvalue index="1" value="100" change="0"></setvalue>			<!-- green value of first light box -->
+			<setvalue index="2" value="100" change="0"></setvalue>			<!-- blue value of first light box -->
 			<setvalue index="3" value="7" change="0"></setvalue>
 			<setvalue index="4" value="7" change="0"></setvalue>
 			<setvalue index="5" value="7" change="0"></setvalue>
@@ -19,12 +16,9 @@
 	<event type="PLAYER_SHIELDS_ON" continuous="yes">
 		<!-- steady blue light -->
 		<timeblock mseconds="1000">
-			<setvalue index="0" value="0" change="0"></setvalue>
-			<!-- red value of first light box -->
-			<setvalue index="1" value="0" change="0"></setvalue>
-			<!-- green value of first light box -->
-			<setvalue index="2" value="200" change="0"></setvalue>
-			<!-- blue value of first light box -->
+			<setvalue index="0" value="0" change="0"></setvalue>			<!-- red value of first light box -->
+			<setvalue index="1" value="0" change="0"></setvalue>			<!-- green value of first light box -->
+			<setvalue index="2" value="200" change="0"></setvalue>			<!-- blue value of first light box -->
 			<setvalue index="3" value="0" change="0"></setvalue>
 			<setvalue index="4" value="0" change="0"></setvalue>
 			<setvalue index="5" value="127" change="0"></setvalue>
@@ -34,12 +28,9 @@
 	<event type="TRACTORED_FOR_DOCKED" continuous="yes">
 		<!-- steady yellow light -->
 		<timeblock mseconds="1000">
-			<setvalue index="0" value="200" change="0"></setvalue>
-			<!-- red value of first light box -->
-			<setvalue index="1" value="200" change="0"></setvalue>
-			<!-- green value of first light box -->
-			<setvalue index="2" value="0" change="0"></setvalue>
-			<!-- blue value of first light box -->
+			<setvalue index="0" value="200" change="0"></setvalue>			<!-- red value of first light box -->
+			<setvalue index="1" value="200" change="0"></setvalue>			<!-- green value of first light box -->
+			<setvalue index="2" value="0" change="0"></setvalue>			<!-- blue value of first light box -->
 			<setvalue index="3" value="127" change="0"></setvalue>
 			<setvalue index="4" value="127" change="0"></setvalue>
 			<setvalue index="5" value="0" change="0"></setvalue>
@@ -49,12 +40,9 @@
 	<event type="COMPLETELY_DOCKED" continuous="yes">
 		<!-- steady green light -->
 		<timeblock mseconds="1000">
-			<setvalue index="0" value="0" change="0"></setvalue>
-			<!-- red value of first light box -->
-			<setvalue index="1" value="200" change="0"></setvalue>
-			<!-- green value of first light box -->
-			<setvalue index="2" value="0" change="0"></setvalue>
-			<!-- blue value of first light box -->
+			<setvalue index="0" value="0" change="0"></setvalue>			<!-- red value of first light box -->
+			<setvalue index="1" value="200" change="0"></setvalue>			<!-- green value of first light box -->
+			<setvalue index="2" value="0" change="0"></setvalue>			<!-- blue value of first light box -->
 			<setvalue index="3" value="0" change="0"></setvalue>
 			<setvalue index="4" value="127" change="0"></setvalue>
 			<setvalue index="5" value="0" change="0"></setvalue>
@@ -63,23 +51,17 @@
 	<!-- ********************************************************************************************* -->
 	<event type="RED_ALERT" continuous="yes">
 		<timeblock mseconds="2000">
-			<setvalue index="0" value="200" change="-90"></setvalue>
-			<!-- red value of first light box -->
-			<setvalue index="1" value="0" change="0"></setvalue>
-			<!-- green value of first light box -->
-			<setvalue index="2" value="0" change="0"></setvalue>
-			<!-- blue value of first light box -->
+			<setvalue index="0" value="200" change="-90"></setvalue>			<!-- red value of first light box -->
+			<setvalue index="1" value="0" change="0"></setvalue>			<!-- green value of first light box -->
+			<setvalue index="2" value="0" change="0"></setvalue>			<!-- blue value of first light box -->
 			<setvalue index="3" value="127" change="0"></setvalue>
 			<setvalue index="4" value="0" change="0"></setvalue>
 			<setvalue index="5" value="0" change="0"></setvalue>
 		</timeblock>
 		<timeblock mseconds="2000">
-			<setvalue index="0" value="0" change="30"></setvalue>
-			<!-- red value of first light box -->
-			<setvalue index="1" value="0" change="0"></setvalue>
-			<!-- green value of first light box -->
-			<setvalue index="2" value="0" change="0"></setvalue>
-			<!-- blue value of first light box -->
+			<setvalue index="0" value="0" change="30"></setvalue>			<!-- red value of first light box -->
+			<setvalue index="1" value="0" change="0"></setvalue>			<!-- green value of first light box -->
+			<setvalue index="2" value="0" change="0"></setvalue>			<!-- blue value of first light box -->
 			<setvalue index="3" value="0" change="0"></setvalue>
 			<setvalue index="4" value="0" change="0"></setvalue>
 			<setvalue index="5" value="0" change="0"></setvalue>
@@ -89,33 +71,23 @@
 	<event type="SHIP_DAMAGE_20" continuous="yes">
 		<!-- flicker the light of the first light box -->
 		<timeblock mseconds="60">
-			<setvalue index="0" value="0" change="0"></setvalue>
-			<!-- red value of first light box -->
-			<setvalue index="1" value="0" change="0"></setvalue>
-			<!-- green value of first light box -->
-			<setvalue index="2" value="0" change="0"></setvalue>
-			<!-- blue value of first light box -->
+			<setvalue index="0" value="0" change="0"></setvalue>			<!-- red value of first light box -->
+			<setvalue index="1" value="0" change="0"></setvalue>			<!-- green value of first light box -->
+			<setvalue index="2" value="0" change="0"></setvalue>			<!-- blue value of first light box -->
 
-			<setvalue index="6" value="255" change="0"></setvalue>
-			<!-- smoke -->
+			<setvalue index="6" value="255" change="0"></setvalue>			<!-- smoke -->
 		</timeblock>
 		<timeblock mseconds="600"></timeblock>
 		<timeblock mseconds="81">
-			<setvalue index="0" value="0" change="0"></setvalue>
-			<!-- red value of first light box -->
-			<setvalue index="1" value="0" change="0"></setvalue>
-			<!-- green value of first light box -->
-			<setvalue index="2" value="0" change="0"></setvalue>
-			<!-- blue value of first light box -->
+			<setvalue index="0" value="0" change="0"></setvalue>			<!-- red value of first light box -->
+			<setvalue index="1" value="0" change="0"></setvalue>			<!-- green value of first light box -->
+			<setvalue index="2" value="0" change="0"></setvalue>			<!-- blue value of first light box -->
 		</timeblock>
 		<timeblock mseconds="450"></timeblock>
 		<timeblock mseconds="81">
-			<setvalue index="0" value="0" change="0"></setvalue>
-			<!-- red value of first light box -->
-			<setvalue index="1" value="0" change="0"></setvalue>
-			<!-- green value of first light box -->
-			<setvalue index="2" value="0" change="0"></setvalue>
-			<!-- blue value of first light box -->
+			<setvalue index="0" value="0" change="0"></setvalue>			<!-- red value of first light box -->
+			<setvalue index="1" value="0" change="0"></setvalue>			<!-- green value of first light box -->
+			<setvalue index="2" value="0" change="0"></setvalue>			<!-- blue value of first light box -->
 		</timeblock>
 		<timeblock mseconds="4501"></timeblock>
 	</event>
@@ -123,33 +95,24 @@
 	<event type="SHIP_DAMAGE_40" continuous="yes">
 		<!-- flicker the light of the first light box -->
 		<timeblock mseconds="60">
-			<setvalue index="0" value="0" change="0"></setvalue>
-			<!-- red value of first light box -->
-			<setvalue index="1" value="0" change="0"></setvalue>
-			<!-- green value of first light box -->
-			<setvalue index="2" value="0" change="0"></setvalue>
-			<!-- blue value of first light box -->
+			<setvalue index="0" value="0" change="0"></setvalue>			<!-- red value of first light box -->
+			<setvalue index="1" value="0" change="0"></setvalue>			<!-- green value of first light box -->
+			<setvalue index="2" value="0" change="0"></setvalue>			<!-- blue value of first light box -->
 
 			<setvalue index="6" value="255" change="0"></setvalue>
 			<!-- smoke -->
 		</timeblock>
 		<timeblock mseconds="200"></timeblock>
 		<timeblock mseconds="81">
-			<setvalue index="0" value="0" change="0"></setvalue>
-			<!-- red value of first light box -->
-			<setvalue index="1" value="0" change="0"></setvalue>
-			<!-- green value of first light box -->
-			<setvalue index="2" value="0" change="0"></setvalue>
-			<!-- blue value of first light box -->
+			<setvalue index="0" value="0" change="0"></setvalue>			<!-- red value of first light box -->
+			<setvalue index="1" value="0" change="0"></setvalue>			<!-- green value of first light box -->
+			<setvalue index="2" value="0" change="0"></setvalue>			<!-- blue value of first light box -->
 		</timeblock>
 		<timeblock mseconds="550"></timeblock>
 		<timeblock mseconds="81">
-			<setvalue index="0" value="0" change="0"></setvalue>
-			<!-- red value of first light box -->
-			<setvalue index="1" value="0" change="0"></setvalue>
-			<!-- green value of first light box -->
-			<setvalue index="2" value="0" change="0"></setvalue>
-			<!-- blue value of first light box -->
+			<setvalue index="0" value="0" change="0"></setvalue>			<!-- red value of first light box -->
+			<setvalue index="1" value="0" change="0"></setvalue>			<!-- green value of first light box -->
+			<setvalue index="2" value="0" change="0"></setvalue>			<!-- blue value of first light box -->
 		</timeblock>
 		<timeblock mseconds="4501"></timeblock>
 	</event>
@@ -157,30 +120,21 @@
 	<event type="SHIP_DAMAGE_60" continuous="yes">
 		<!-- flicker the light of the first light box -->
 		<timeblock mseconds="60">
-			<setvalue index="0" value="0" change="0"></setvalue>
-			<!-- red value of first light box -->
-			<setvalue index="1" value="0" change="0"></setvalue>
-			<!-- green value of first light box -->
-			<setvalue index="2" value="0" change="0"></setvalue>
-			<!-- blue value of first light box -->
+			<setvalue index="0" value="0" change="0"></setvalue>			<!-- red value of first light box -->
+			<setvalue index="1" value="0" change="0"></setvalue>			<!-- green value of first light box -->
+			<setvalue index="2" value="0" change="0"></setvalue>			<!-- blue value of first light box -->
 		</timeblock>
 		<timeblock mseconds="733"></timeblock>
 		<timeblock mseconds="81">
-			<setvalue index="0" value="0" change="0"></setvalue>
-			<!-- red value of first light box -->
-			<setvalue index="1" value="0" change="0"></setvalue>
-			<!-- green value of first light box -->
-			<setvalue index="2" value="0" change="0"></setvalue>
-			<!-- blue value of first light box -->
+			<setvalue index="0" value="0" change="0"></setvalue>			<!-- red value of first light box -->
+			<setvalue index="1" value="0" change="0"></setvalue>			<!-- green value of first light box -->
+			<setvalue index="2" value="0" change="0"></setvalue>			<!-- blue value of first light box -->
 		</timeblock>
 		<timeblock mseconds="1450"></timeblock>
 		<timeblock mseconds="81">
-			<setvalue index="0" value="0" change="0"></setvalue>
-			<!-- red value of first light box -->
-			<setvalue index="1" value="0" change="0"></setvalue>
-			<!-- green value of first light box -->
-			<setvalue index="2" value="0" change="0"></setvalue>
-			<!-- blue value of first light box -->
+			<setvalue index="0" value="0" change="0"></setvalue>			<!-- red value of first light box -->
+			<setvalue index="1" value="0" change="0"></setvalue>			<!-- green value of first light box -->
+			<setvalue index="2" value="0" change="0"></setvalue>			<!-- blue value of first light box -->
 		</timeblock>
 		<timeblock mseconds="1001"></timeblock>
 	</event>
@@ -188,63 +142,41 @@
 	<event type="SOMETHING_HITS_PLAYER">
 		<!-- flicker the light of the first light box -->
 		<timeblock mseconds="60">
-			<setvalue index="0" value="0" change="0"></setvalue>
-			<!-- red value of first light box -->
-			<setvalue index="1" value="0" change="0"></setvalue>
-			<!-- green value of first light box -->
-			<setvalue index="2" value="0" change="0"></setvalue>
-			<!-- blue value of first light box -->
+			<setvalue index="0" value="0" change="0"></setvalue>			<!-- red value of first light box -->
+			<setvalue index="1" value="0" change="0"></setvalue>			<!-- green value of first light box -->
+			<setvalue index="2" value="0" change="0"></setvalue>			<!-- blue value of first light box -->
 		</timeblock>
 		<timeblock mseconds="60">
-			<setvalue index="0" value="255" change="0"></setvalue>
-			<!-- red value of first light box -->
-			<setvalue index="1" value="255" change="0"></setvalue>
-			<!-- green value of first light box -->
-			<setvalue index="2" value="255" change="0"></setvalue>
-			<!-- blue value of first light box -->
+			<setvalue index="0" value="255" change="0"></setvalue>			<!-- red value of first light box -->
+			<setvalue index="1" value="255" change="0"></setvalue>			<!-- green value of first light box -->
+			<setvalue index="2" value="255" change="0"></setvalue>			<!-- blue value of first light box -->
 		</timeblock>
 		<timeblock mseconds="60">
-			<setvalue index="0" value="0" change="0"></setvalue>
-			<!-- red value of first light box -->
-			<setvalue index="1" value="0" change="0"></setvalue>
-			<!-- green value of first light box -->
-			<setvalue index="2" value="0" change="0"></setvalue>
-			<!-- blue value of first light box -->
+			<setvalue index="0" value="0" change="0"></setvalue>			<!-- red value of first light box -->
+			<setvalue index="1" value="0" change="0"></setvalue>			<!-- green value of first light box -->
+			<setvalue index="2" value="0" change="0"></setvalue>			<!-- blue value of first light box -->
 		</timeblock>
 		<timeblock mseconds="60">
-			<setvalue index="0" value="255" change="0"></setvalue>
-			<!-- red value of first light box -->
-			<setvalue index="1" value="255" change="0"></setvalue>
-			<!-- green value of first light box -->
-			<setvalue index="2" value="255" change="0"></setvalue>
-			<!-- blue value of first light box -->
+			<setvalue index="0" value="255" change="0"></setvalue>			<!-- red value of first light box -->
+			<setvalue index="1" value="255" change="0"></setvalue>			<!-- green value of first light box -->
+			<setvalue index="2" value="255" change="0"></setvalue>			<!-- blue value of first light box -->
 		</timeblock>
 		<timeblock mseconds="60">
-			<setvalue index="0" value="0" change="0"></setvalue>
-			<!-- red value of first light box -->
-			<setvalue index="1" value="0" change="0"></setvalue>
-			<!-- green value of first light box -->
-			<setvalue index="2" value="0" change="0"></setvalue>
-			<!-- blue value of first light box -->
+			<setvalue index="0" value="0" change="0"></setvalue>			<!-- red value of first light box -->
+			<setvalue index="1" value="0" change="0"></setvalue>			<!-- green value of first light box -->
+			<setvalue index="2" value="0" change="0"></setvalue>			<!-- blue value of first light box -->
 		</timeblock>
 		<timeblock mseconds="60">
-			<setvalue index="0" value="255" change="0"></setvalue>
-			<!-- red value of first light box -->
-			<setvalue index="1" value="255" change="0"></setvalue>
-			<!-- green value of first light box -->
-			<setvalue index="2" value="255" change="0"></setvalue>
-			<!-- blue value of first light box -->
+			<setvalue index="0" value="255" change="0"></setvalue>			<!-- red value of first light box -->
+			<setvalue index="1" value="255" change="0"></setvalue>			<!-- green value of first light box -->
+			<setvalue index="2" value="255" change="0"></setvalue>			<!-- blue value of first light box -->
 		</timeblock>
 		<timeblock mseconds="60">
-			<setvalue index="0" value="0" change="0"></setvalue>
-			<!-- red value of first light box -->
-			<setvalue index="1" value="0" change="0"></setvalue>
-			<!-- green value of first light box -->
-			<setvalue index="2" value="0" change="0"></setvalue>
-			<!-- blue value of first light box -->
+			<setvalue index="0" value="0" change="0"></setvalue>			<!-- red value of first light box -->
+			<setvalue index="1" value="0" change="0"></setvalue>			<!-- green value of first light box -->
+			<setvalue index="2" value="0" change="0"></setvalue>			<!-- blue value of first light box -->
 
-			<setvalue index="6" value="255" change="0"></setvalue>
-			<!-- smoke -->
+			<setvalue index="6" value="255" change="0"></setvalue>			<!-- smoke -->
 		</timeblock>
 	</event>
 </DMX_CONTROL>
