@@ -12,6 +12,22 @@
 			<setvalue index="5" value="7" change="0"></setvalue>
 
 			<setvalue index="6" value="0" change="0"></setvalue>			<!-- smoke -->
+			<setvalue index="7" value="0" change="0"></setvalue>			<!-- jump -->
+			<setvalue index="8" value="0" change="0"></setvalue>			<!-- backliht -->
+		</timeblock>
+	</event>
+	<!-- ********************************************************************************************* -->
+	<event type="JUMP_INITIATED" continuous="yes">
+		<!-- steady blue light -->
+		<timeblock mseconds="1000">
+			<setvalue index="7" value="255" change="0"></setvalue>			<!-- jump -->
+		</timeblock>
+	</event>
+	<!-- ********************************************************************************************* -->
+	<event type="HELM_IN_REVERSE" continuous="yes">
+		<!-- steady blue light -->
+		<timeblock mseconds="1000">
+			<setvalue index="8" value="255" change="0"></setvalue>			<!-- backliht -->
 		</timeblock>
 	</event>
 	<!-- ********************************************************************************************* -->
