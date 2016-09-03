@@ -14,6 +14,7 @@
 			<setvalue index="6" value="0" change="0"></setvalue>			<!-- smoke -->
 			<setvalue index="7" value="0" change="0"></setvalue>			<!-- jump -->
 			<setvalue index="8" value="0" change="0"></setvalue>			<!-- backliht -->
+			<setvalue index="9" value="0" change="0"></setvalue>			<!-- sci scan -->
 		</timeblock>
 	</event>
 	<!-- ********************************************************************************************* -->
@@ -35,6 +36,13 @@
 		<!-- helm_in_reverse -->
 		<timeblock mseconds="1000">
 			<setvalue index="8" value="255" change="0"></setvalue>			<!-- backliht -->
+		</timeblock>
+	</event>
+	<!-- ********************************************************************************************* -->
+	<event type="SCAN_IN_PROGRESS" continuous="yes">
+		<!--science scan active-->
+		<timeblock mseconds="1000">
+			<setvalue index="9" value="255" change="0"></setvalue>			<!-- sci scan -->
 		</timeblock>
 	</event>
 	<!-- ********************************************************************************************* -->
@@ -201,7 +209,7 @@
 	<!-- ********************************************************************************************* -->
 	<event type="SOMETHING_HITS_PLAYER" if="SHIP_DAMAGE_20">
 		<!-- smoke when somethings hits and we have damage-->
-		<timeblock mseconds="1000">	</timeblock>
+		<timeblock mseconds="1000"></timeblock>
 		<timeblock mseconds="100">
 			<setvalue index="6" value="255" change="0"></setvalue>			<!-- smoke -->
 		</timeblock>
