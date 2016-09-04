@@ -14,6 +14,7 @@
 #define RELAY_BASE_CH 9
 #define NEOPIN 10
 #define RELAYS 2
+#define SCANIDX 1
 const uint8_t relaypins[] = {16, 255};
 const bool relayinverted[] = {true};
 #define PixelCount 10
@@ -67,7 +68,7 @@ void colorWipe(uint32_t c, uint8_t wait, uint16_t maxOn = 8) {
   for (uint16_t i = 0; i < strip.numPixels(); i++) {
     strip.setPixelColor(i, c);
     // only keep maxOn pixels turned on at a time
-    if (i >= maxOn)
+    if (0 < maxOn && i >= maxOn)
       strip.setPixelColor(i - maxOn, 0);
     if (wait > 0) {
       strip.show();
@@ -90,6 +91,8 @@ void setup() {
 
   for (int r = 0; r < RELAYS; r++) {
     uint8_t pin = relaypins[r];
+    if (pin > 127)
+      continue;
     pinMode(pin, OUTPUT);
     digitalWrite(pin, true == relayinverted[r] ? LOW : HIGH);
     delay(200);
@@ -99,7 +102,6 @@ void setup() {
 
   strip.setPixelColor(0, 0x000008);
   strip.setPixelColor(PixelCount - 1, 0x000100);
-  //strip.setPixelColor(PixelCount+1, 0);
   strip.show();
 
   Serial.begin(9600);
@@ -196,7 +198,6 @@ void readDMX() {
   static int lastOk = 1;
   if (lastPacket < 3000) {
     bool hasChange = lastOk != 0;
-    lastOk = 0;
     uint32_t c = 0; //pixel color return ((uint32_t)r << 16) | ((uint32_t)g <<  8) | b;
     for (int i = BASE_CH; i < BASE_CH + 3 && i <= 512; i++) {
       byte b = DMXSerial.read(i);
@@ -216,32 +217,49 @@ void readDMX() {
           digitalWrite(relaypins[r], nrelay == relayinverted[r] ? LOW : HIGH);
         // TODO handle special case calls that we want to react to with non relays
         oldrelay[r] = nrelay;
+        // special case when scan is activated
+        if (r == SCANIDX && nrelay) {
+          colorWipe(0, 0, 0);
+          c = strip.Color(0, 16, 0);
+          colorWipe(c, 50, 2);
+          old = c;
+        }
       }
     }
     if (hasChange) {
       strip.show();
+      lastOk = 0;
     }
   } else if (lastOk == 0) {
     lastOk = 1;
   } else {
-    colorWipe(strip.Color(0, 64, 0), 10, 3);
+    Serial.println(String(millis()) + " last DMX " + String(lastPacket) + " ms ago.");
+    colorWipe(strip.Color(0, 7, 0), 10, 3);
   }
 }
 
-uint8_t rep = REPS;
+void nextFrame() {
+  unsigned long now = millis();
+
+  static int i = 0;
+  static unsigned long nextFrame = 0;
+  if (nextFrame <= now) {
+    // For each frame...
+    animFrame(animscan);
+    nextFrame = now + (readAnim(animscan) * 10);
+    if (i >= sizeof(animscan)) i = 0;
+  }
+}
 
 void loop() {
   readDMX();
-  for (int i = 0; i < sizeof(animscan); i) { // For each frame...
-    animFrame(animscan);
-    // todo use millis for delay instead since we need it to be responsive
-    delay(readAnim(animscan) * 10);
-  }
-
-  if (!--rep) {            // If last cycle...
-    delay(5000);
-    ledClear();            // Blank display
-    //ledCmd(0x21);          // Re-enable matrix
+  unsigned long now = millis();
+  static bool scanActive = false;
+  if (oldrelay[SCANIDX]) {
+    scanActive = true;
+    nextFrame();
+  } else if (scanActive) {
+    ledClear();
   }
 }
 

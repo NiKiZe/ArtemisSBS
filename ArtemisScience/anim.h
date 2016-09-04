@@ -1,7 +1,5 @@
 // Edit this file to change the animation.
 
-#define REPS 30 // Number of times to repeat the animation loop (1-255)
-
 const uint8_t PROGMEM animscan[] = {
 
   // Animation bitmaps.  Each frame of animation MUST contain
