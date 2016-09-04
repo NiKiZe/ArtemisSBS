@@ -27,9 +27,9 @@ Adafruit_NeoPixel strip = Adafruit_NeoPixel(PixelCount, NEOPIN, NEO_GRB + NEO_KH
 const uint8_t kp_pins[KPPINS] = {4, 5, 6, 7, 8, 9};
 
 const KeyboardKeycode kkmap[KPROWS][KPCOLS] = {
-  {KEY_1, KEY_2, KEY_3},
-  {KEY_4, KEY_5, KEY_6},
-  {KEY_7, KEY_8, KEY_9},
+  {KEY_9, KEY_ENTER, KEY_I},
+  {KEY_8, KEY_5, KEY_U},
+  {KEY_7, KEY_4, KEY_Y},
 };
 
 #define readAnim(anim) pgm_read_byte(&anim[i++])
@@ -125,6 +125,7 @@ String hex_string(uint64_t v) {
   return ret;
 }
 
+static unsigned long lastEnter = 0;
 void handleKeys() {
   //bool hidBoot = (Keyboard.getProtocol() == HID_BOOT_PROTOCOL)
 
@@ -178,16 +179,19 @@ void handleKeys() {
       if ((change & z) == z) {
         // this seemed nice to have (but creates a different HID device)
         Keyboard.wakeupHost();
-        // Serial.println(" " + kmap[x][y] + " " + (((pressed & z) == z) ? "pressed" : "released"));
         KeyboardKeycode k = kkmap[x][y];
-        if ((pressed & z) == z)
+        Serial.println(" " + String(k, HEX) + " " + (((pressed & z) == z) ? "pressed" : "released"));
+        if ((pressed & z) == z) {
           BootKeyboard.press(k);
-        else
+          if (k == KEY_ENTER) {
+            lastEnter = millis();
+          }
+        } else {
           BootKeyboard.release(k);
+        }
       }
     }
     lpressed = pressed;
-    // delay(20);
   }
 }
 
@@ -203,8 +207,15 @@ void readDMX() {
       byte b = DMXSerial.read(i);
       c = (c << 8) | b;
     }
+
+    // convert all types of white to 0
+    byte ca[] = {c & 0xff, (c >> 8) & 0xff, (c >> 16) & 0xff};
+    if (ca[0] == ca[1] && ca[0] == ca[2])
+      c = 0;
+
     static uint32_t old = 0;
     if (old != c) {
+      //Serial.println(String(millis()) + " New Color " + String(c, HEX) + " old " + String(old, HEX));
       colorWipe(c, 0, 0);
       old = c;
     }
@@ -241,7 +252,7 @@ void readDMX() {
 void nextFrame() {
   unsigned long now = millis();
 
-  static int i = 0;
+  static unsigned int i = 0;
   static unsigned long nextFrame = 0;
   if (nextFrame <= now) {
     // For each frame...
@@ -254,8 +265,17 @@ void nextFrame() {
 void loop() {
   readDMX();
   unsigned long now = millis();
+
+  static unsigned long nextKeys = 0;
+  if (nextKeys <= now) {
+    handleKeys();
+    nextKeys = now + 20;
+  }
+  
   static bool scanActive = false;
-  if (oldrelay[SCANIDX]) {
+  // always show scan animation for 10 seconds after enter press
+  // side effect by using now - 0 is that this always runs on start (not a bad thing)
+  if (oldrelay[SCANIDX] || now - lastEnter < 10000) {
     scanActive = true;
     nextFrame();
   } else if (scanActive) {
