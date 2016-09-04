@@ -2,6 +2,7 @@
 #include <DMXSerial.h>
 
 #define BASE_CH 4 // 1 based DMX channel, max 512
+#define RELAY_BASE_CH BASE_CH + 3
 #define NEOPIN 6
 #define RELAYS 2
 const uint8_t relaypins[] = {4, 5};
@@ -27,7 +28,7 @@ void colorWipe(uint32_t c, uint8_t wait, uint16_t maxOn = 8) {
   for (uint16_t i = 0; i < strip.numPixels(); i++) {
     strip.setPixelColor(i, c);
     // only keep maxOn pixels turned on at a time
-    if (i >= maxOn)
+    if (0 < maxOn && i >= maxOn)
       strip.setPixelColor(i - maxOn, 0);
     if (wait > 0) {
       strip.show();
@@ -59,16 +60,16 @@ void setup()
   strip.setPixelColor(PixelCount - 1, 0x000100);
   //strip.setPixelColor(PixelCount+1, 0);
   strip.show();
-}
 
-int lastOk = 1;
-uint32_t old = 0;
+  Serial.begin(9600);
+}
 
 void loop()
 {
   // Calculate how long no data backet was received
   unsigned long lastPacket = DMXSerial.noDataSince();
 
+  static int lastOk = 1;
   if (lastPacket < 3000) {
     bool hasChange = lastOk != 0;
     lastOk = 0;
@@ -77,14 +78,16 @@ void loop()
       byte b = DMXSerial.read(i);
       c = (c << 8) | b;
     }
+    static uint32_t old = 0;
     if (old != c) {
-      colorWipe(c, 0, 512);
+      colorWipe(c, 0, 0);
       old = c;
     }
 
     for (int r = 0; r < RELAYS; r++) {
-      bool nrelay = DMXSerial.read(BASE_CH + 3 + r) != 0;
+      bool nrelay = DMXSerial.read(RELAY_BASE_CH + r) != 0;
       if (oldrelay[r] != nrelay) {
+        Serial.println("relay change to " + String(nrelay ? "on" : "off"));
         digitalWrite(relaypins[r], nrelay == relayinverted[r] ? LOW : HIGH);
         oldrelay[r] = nrelay;
       }
