@@ -3,7 +3,9 @@
 
 #define BASE_CH 4 // 1 based DMX channel, max 512
 #define NEOPIN 6
-#define RELAYPIN 4
+#define RELAYS 2
+const uint8_t relaypins[] = {4, 5};
+const bool relayinverted[] = {false, true};
 #define PixelCount 240
 
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(PixelCount, NEOPIN, NEO_GRB + NEO_KHZ800);
@@ -36,31 +38,31 @@ void colorWipe(uint32_t c, uint8_t wait, uint16_t maxOn = 8) {
     strip.show();
 }
 
+bool oldrelay[RELAYS];
+
 void setup()
 {
   DMXSerial.init(DMXReceiver);
 
   strip.begin();
 
-  pinMode(RELAYPIN, OUTPUT);
-  digitalWrite(RELAYPIN, HIGH);
+  for (int r = 0; r < RELAYS; r++) {
+    uint8_t pin = relaypins[r];
+    pinMode(pin, OUTPUT);
+    digitalWrite(pin, true == relayinverted[r] ? LOW : HIGH);
+    delay(200);
+    digitalWrite(pin, false == relayinverted[r] ? LOW : HIGH);
+    oldrelay[r] = false;
+  }
 
-  strip.show();
   strip.setPixelColor(0, 0x000008);
   strip.setPixelColor(PixelCount - 1, 0x000100);
   //strip.setPixelColor(PixelCount+1, 0);
   strip.show();
-  delay(200);
-
-  colorWipe(ColorArray[0], 10); // Red
-  colorWipe(ColorArray[8], 10);
-
-  digitalWrite(RELAYPIN, LOW);
 }
 
 int lastOk = 1;
 uint32_t old = 0;
-bool relay = false;
 
 void loop()
 {
@@ -79,11 +81,13 @@ void loop()
       colorWipe(c, 0, 512);
       old = c;
     }
-    c = 0;
-    bool nrelay = DMXSerial.read(BASE_CH + 3) != 0;
-    if (relay != nrelay) {
-      digitalWrite(RELAYPIN, nrelay ? HIGH : LOW);
-      relay = nrelay;
+
+    for (int r = 0; r < RELAYS; r++) {
+      bool nrelay = DMXSerial.read(BASE_CH + 3 + r) != 0;
+      if (oldrelay[r] != nrelay) {
+        digitalWrite(relaypins[r], nrelay == relayinverted[r] ? LOW : HIGH);
+        oldrelay[r] = nrelay;
+      }
     }
     if (hasChange) {
       strip.show();
