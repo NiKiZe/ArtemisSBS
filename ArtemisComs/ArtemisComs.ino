@@ -2,7 +2,7 @@
 // https://github.com/NicoHood/HID
 #include "HID-Project.h"
 
-const int pins[] = {2, 3, 4, 5, 6, 7, 8, 9};
+const uint8_t pins[] = {2, 3, 4, 5, 6, 7, 8, 9};
 /*
       7 6 5 4
   3 - 1 2 3 A
