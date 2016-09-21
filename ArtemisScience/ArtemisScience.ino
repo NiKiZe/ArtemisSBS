@@ -65,8 +65,10 @@ void ledSetup() {
 
 // Fill the dots one after the other with a color
 void colorWipe(uint32_t c, uint8_t wait, uint16_t maxOn = 8) {
-  for (uint16_t i = 0; i < strip.numPixels(); i++) {
-    strip.setPixelColor(i, c);
+  int numpx = strip.numPixels();
+  for (uint16_t i = 0; i < numpx + maxOn; i++) {
+    if (i < numpx)
+      strip.setPixelColor(i, c);
     // only keep maxOn pixels turned on at a time
     if (0 < maxOn && i >= maxOn)
       strip.setPixelColor(i - maxOn, 0);
@@ -201,32 +203,21 @@ void readDMX() {
 
   static int lastOk = 1;
   if (lastPacket < 3000) {
-    bool hasChange = lastOk != 0;
+    bool hasChange = false;
     uint32_t c = 0; //pixel color return ((uint32_t)r << 16) | ((uint32_t)g <<  8) | b;
-    for (int i = BASE_CH; i < BASE_CH + 3 && i <= 512; i++) {
-      byte b = DMXSerial.read(i);
-      c = (c << 8) | b;
-    }
-
-    // convert all types of white to 0
-    byte ca[] = {c & 0xff, (c >> 8) & 0xff, (c >> 16) & 0xff};
-    if (ca[0] == ca[1] && ca[0] == ca[2])
-      c = 0;
-
     static uint32_t old = 0;
-    if (old != c) {
-      //Serial.println(String(millis()) + " New Color " + String(c, HEX) + " old " + String(old, HEX));
-      colorWipe(c, 0, 0);
-      old = c;
-    }
 
+    unsigned long now = millis();
+    static unsigned long lastrelay[RELAYS];
     for (int r = 0; r < RELAYS; r++) {
       bool nrelay = DMXSerial.read(RELAY_BASE_CH + r) != 0;
-      if (oldrelay[r] != nrelay) {
-        Serial.println("relay change to " + String(nrelay ? "on" : "off"));
+      if (oldrelay[r] != nrelay && now - lastrelay[r] > 50) {
+        hasChange = true;
+        Serial.println("relay " + String(r) + " change to " + String(nrelay ? "on" : "off") + " last " + String(now - lastrelay[r]));
+        lastrelay[r] = now;
         if (relaypins[r] <= 127)
           digitalWrite(relaypins[r], nrelay == relayinverted[r] ? LOW : HIGH);
-        // TODO handle special case calls that we want to react to with non relays
+
         oldrelay[r] = nrelay;
         // special case when scan is activated
         if (r == SCANIDX && nrelay) {
@@ -237,9 +228,29 @@ void readDMX() {
         }
       }
     }
-    if (hasChange) {
-      strip.show();
-      lastOk = 0;
+
+    if (!hasChange) {
+      hasChange = lastOk != 0;
+      for (int i = BASE_CH; i < BASE_CH + 3 && i <= 512; i++) {
+        byte b = DMXSerial.read(i);
+        c = (c << 8) | b;
+      }
+
+      // convert all types of white to 0
+      byte ca[] = {c & 0xff, (c >> 8) & 0xff, (c >> 16) & 0xff};
+      if (ca[0] == ca[1] && ca[0] == ca[2])
+        c = 0;
+
+      if (old != c) {
+        Serial.println(String(millis()) + " New Color " + String(c, HEX) + " old " + String(old, HEX));
+        colorWipe(c, 0, 0);
+        old = c;
+      }
+
+      if (hasChange) {
+        strip.show();
+        lastOk = 0;
+      }
     }
   } else if (lastOk == 0) {
     lastOk = 1;
@@ -271,7 +282,7 @@ void loop() {
     handleKeys();
     nextKeys = now + 20;
   }
-  
+
   static bool scanActive = false;
   // always show scan animation for 10 seconds after enter press
   // side effect by using now - 0 is that this always runs on start (not a bad thing)
