@@ -93,7 +93,8 @@ void setup() {
   // initialize base slider pos (non touched base value)
   for (int i = 0; i < SLIDERS; i++) {
     pinMode(COLPINS[i], OUTPUT);
-    oVal[i] = POTMIN;
+    // default to 100% of 300% max
+    oVal[i] = map(1, 0, 3, POTMIN, POTMAX);
   }
 }
 

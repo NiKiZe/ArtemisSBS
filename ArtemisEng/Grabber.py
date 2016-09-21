@@ -2,7 +2,6 @@
 # NOTE: This script requires the following Python modules:
 #  pygame   - http://www.pygame.org/
 #  pySerial - http://pyserial.sourceforge.net/
-#  PIL - http://www.pythonware.com/products/pil/
 #
 # The below should get you going
 # pip install pygame
