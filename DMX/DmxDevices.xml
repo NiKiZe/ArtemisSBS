@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DMX_DEVICES>
+	<profile name="upp">
+		<inputDevice id="first light box" channelCount="3" firstChannel="1">
+			<outputDevice type="dmx-3ch" param="1"></outputDevice>
+		</inputDevice>
+		<inputDevice id="neopx" channelCount="3" firstChannel="4">
+			<outputDevice type="dmx-3ch" param="4"></outputDevice>
+		</inputDevice>
+		<inputDevice id="smoke" channelCount="1" firstChannel="7">
+			<outputDevice type="dmx-1ch" param="7"></outputDevice>
+		</inputDevice>
+		<inputDevice id="jump" channelCount="1" firstChannel="8">
+			<outputDevice type="dmx-1ch" param="8"></outputDevice>
+		</inputDevice>
+		<inputDevice id="backlight" channelCount="1" firstChannel="9">
+			<outputDevice type="dmx-1ch" param="9"></outputDevice>
+		</inputDevice>
+		<inputDevice id="sci scan" channelCount="1" firstChannel="10">
+			<outputDevice type="dmx-1ch" param="10"></outputDevice>
+		</inputDevice>
+		<inputDevice id="audio" channelCount="1" firstChannel="512">
+			<outputDevice type="audio-1ch" param="Default DirectSound Device"></outputDevice>
+		</inputDevice>
+		<inputDevice id="Beam1" channelCount="1" firstChannel="11">
+			<outputDevice type="dmx-1ch" param="11"></outputDevice>
+		</inputDevice>
+		<inputDevice id="Beam2" channelCount="1" firstChannel="12">
+			<outputDevice type="dmx-1ch" param="12"></outputDevice>
+		</inputDevice>
+	</profile>
+	<sound value="3" src="tadupd07.wav"></sound>
+	<sound value="4" src="tadupd04.wav"></sound>
+</DMX_DEVICES>
