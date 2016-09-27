@@ -15,6 +15,8 @@
 			<setvalue index="7" value="0" change="0"></setvalue>			<!-- intensity value of jump -->
 			<setvalue index="8" value="0" change="0"></setvalue>			<!-- intensity value of backlight -->
 			<setvalue index="9" value="0" change="0"></setvalue>			<!-- intensity value of sci scan -->
+			<setvalue index="10" value="0" change="0"></setvalue>			<!-- intensity value of Beam1 -->
+			<setvalue index="11" value="0" change="0"></setvalue>			<!-- intensity value of Beam2 -->
 		</timeblock>
 	</event>
 	<!-- ********************************************************************************************* -->
@@ -222,5 +224,33 @@
 			<setvalue index="6" value="255" change="0"></setvalue>			<!-- intensity value of smoke -->
 		</timeblock>
 		<timeblock mseconds="19500"></timeblock>
+	</event>
+	<!-- ********************************************************************************************* -->
+	<event type="NUKE_READY_TO_FIRE">
+		<!--Audio nuke ready-->
+		<timeblock mseconds="2000">
+			<setvalue index="511" value="3" change="0"></setvalue>			<!-- play tadupd07 on audio -->
+		</timeblock>
+	</event>
+	<!-- ********************************************************************************************* -->
+	<event type="TORP_NUKE_FIRED">
+		<!--Audio nuke launched-->
+		<timeblock mseconds="2500">
+			<setvalue index="511" value="4" change="0"></setvalue>			<!-- play tadupd04 on audio -->
+		</timeblock>
+	</event>
+	<!-- ********************************************************************************************* -->
+	<event type="BEAM1_FIRED">
+		<!--Beam1-->
+		<timeblock mseconds="300">
+			<setvalue index="10" value="255" change="0"></setvalue>			<!-- intensity value of Beam1 -->
+		</timeblock>
+	</event>
+	<!-- ********************************************************************************************* -->
+	<event type="BEAM2_FIRED">
+		<!--Beam2-->
+		<timeblock mseconds="300">
+			<setvalue index="11" value="255" change="0"></setvalue>			<!-- intensity value of Beam2 -->
+		</timeblock>
 	</event>
 </DMX_CONTROL>
