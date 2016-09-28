@@ -2,11 +2,12 @@
 #include <DMXSerial.h>
 
 #define BASE_CH 4 // 1 based DMX channel, max 512
-#define RELAY_BASE_CH BASE_CH + 3
+// but remember that Artemis DMX commands file is 0 based
 #define NEOPIN 6
-#define RELAYS 2
-const uint8_t relaypins[] = {4, 5};
-const bool relayinverted[] = {false, true};
+#define RELAYS 4
+const uint8_t relaychs[] = {7, 8, 11, 12};
+const uint8_t relaypins[] = {4, 5, 7, 8};
+const bool relayinverted[] = {false, true, false, false};
 #define PixelCount 240
 
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(PixelCount, NEOPIN, NEO_GRB + NEO_KHZ800);
@@ -85,7 +86,7 @@ void loop()
     }
 
     for (int r = 0; r < RELAYS; r++) {
-      bool nrelay = DMXSerial.read(RELAY_BASE_CH + r) != 0;
+      bool nrelay = DMXSerial.read(relaychs[r]) != 0;
       if (oldrelay[r] != nrelay) {
         Serial.println("relay change to " + String(nrelay ? "on" : "off"));
         digitalWrite(relaypins[r], nrelay == relayinverted[r] ? LOW : HIGH);
