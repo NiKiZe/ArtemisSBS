@@ -28,6 +28,9 @@
 		<inputDevice id="Beam2" channelCount="1" firstChannel="12">
 			<outputDevice type="dmx-1ch" param="12"></outputDevice>
 		</inputDevice>
+		<inputDevice id="Game Active" channelCount="1" firstChannel="13">
+			<outputDevice type="dmx-1ch" param="13"></outputDevice>
+		</inputDevice>
 	</profile>
 	<sound value="3" src="tadupd07.wav"></sound>
 	<sound value="4" src="tadupd04.wav"></sound>

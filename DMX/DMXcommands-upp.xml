@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <DMX_CONTROL version="2.00" log="yes" port="2012" deviceProfile="upp">
 	<!-- ********************************************************************************************* -->
+	<event type="ALWAYS_ON" continuous="yes">
+		<timeblock mseconds="1000">
+			<setvalue index="12" value="0" change="0"></setvalue>			<!-- intensity value of Game Active -->
+		</timeblock>
+	</event>
+	<!-- ********************************************************************************************* -->
 	<event type="NORMAL_CONDITION_1" continuous="yes">
 		<!-- steady soft white light -->
 		<timeblock mseconds="1000">
@@ -17,6 +23,17 @@
 			<setvalue index="9" value="0" change="0"></setvalue>			<!-- intensity value of sci scan -->
 			<setvalue index="10" value="0" change="0"></setvalue>			<!-- intensity value of Beam1 -->
 			<setvalue index="11" value="0" change="0"></setvalue>			<!-- intensity value of Beam2 -->
+			<setvalue index="12" value="255" change="0"></setvalue>			<!-- intensity value of Game Active -->
+		</timeblock>
+		<timeblock mseconds="5000" phase="exit">
+			<setvalue index="12" value="255" change="0"></setvalue>			<!-- intensity value of Game Active -->
+		</timeblock>
+	</event>
+	<!-- ********************************************************************************************* -->
+	<event type="GAME_PAUSED" continuous="yes">
+		<timeblock mseconds="500"></timeblock>
+		<timeblock mseconds="60000">
+			<setvalue index="12" value="0" change="0"></setvalue>			<!-- intensity value of Game Active -->
 		</timeblock>
 	</event>
 	<!-- ********************************************************************************************* -->
