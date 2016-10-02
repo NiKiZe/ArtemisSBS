@@ -98,6 +98,12 @@ void loop()
     }
   } else if (lastOk == 0) {
     lastOk = 1;
+    // make sure all relays are reset when DMX signal disappears
+    for (int r = 0; r < RELAYS; r++) {
+      uint8_t pin = relaypins[r];
+      digitalWrite(pin, false == relayinverted[r] ? LOW : HIGH);
+      oldrelay[r] = false;
+    }
   } else {
     colorWipe(ColorArray[lastOk - 1], 10);
     if (lastOk++ == 9)
