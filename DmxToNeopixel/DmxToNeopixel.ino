@@ -8,6 +8,12 @@
 const uint8_t relaychs[] = {7, 8, 11, 12, 13};
 const uint8_t relaypins[] = {4, 5, 7, 8, 16};
 const bool relayinverted[] = {false, true, false, false, true};
+#define SetRelay(r, nrelay)     \
+  if (oldrelay[r] != nrelay) {   \
+    Serial.println(String(millis()) + " relay ch " + String(relaychs[r]) + " change to " + String(nrelay ? "on" : "off"));  \
+    digitalWrite(relaypins[r], nrelay == relayinverted[r] ? LOW : HIGH);  \
+    oldrelay[r] = nrelay;  \
+  }
 #define PixelCount 240
 
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(PixelCount, NEOPIN, NEO_GRB + NEO_KHZ800);
@@ -51,10 +57,9 @@ void setup()
   for (int r = 0; r < RELAYS; r++) {
     uint8_t pin = relaypins[r];
     pinMode(pin, OUTPUT);
-    digitalWrite(pin, true == relayinverted[r] ? LOW : HIGH);
+    SetRelay(r, true);
     delay(200);
-    digitalWrite(pin, false == relayinverted[r] ? LOW : HIGH);
-    oldrelay[r] = false;
+    SetRelay(r, false);
   }
 
   strip.setPixelColor(0, 0x000008);
@@ -87,24 +92,20 @@ void loop()
 
     for (int r = 0; r < RELAYS; r++) {
       bool nrelay = DMXSerial.read(relaychs[r]) != 0;
-      if (oldrelay[r] != nrelay) {
-        Serial.println("relay change to " + String(nrelay ? "on" : "off"));
-        digitalWrite(relaypins[r], nrelay == relayinverted[r] ? LOW : HIGH);
-        oldrelay[r] = nrelay;
-      }
+      SetRelay(r, nrelay);
     }
     if (hasChange) {
       strip.show();
     }
   } else if (lastOk == 0) {
     lastOk = 1;
-    // make sure all relays are reset when DMX signal disappears
-    for (int r = 0; r < RELAYS; r++) {
-      uint8_t pin = relaypins[r];
-      digitalWrite(pin, false == relayinverted[r] ? LOW : HIGH);
-      oldrelay[r] = false;
-    }
   } else {
+    if (lastOk == 1) {
+      // make sure all relays are reset when DMX signal disappears
+      for (int r = 0; r < RELAYS; r++) {
+        SetRelay(r, false);
+      }
+    }
     colorWipe(ColorArray[lastOk - 1], 10);
     if (lastOk++ == 9)
       lastOk = 1;
