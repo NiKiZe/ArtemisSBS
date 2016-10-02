@@ -4,10 +4,10 @@
 #define BASE_CH 4 // 1 based DMX channel, max 512
 // but remember that Artemis DMX commands file is 0 based
 #define NEOPIN 6
-#define RELAYS 4
-const uint8_t relaychs[] = {7, 8, 11, 12};
-const uint8_t relaypins[] = {4, 5, 7, 8};
-const bool relayinverted[] = {false, true, false, false};
+#define RELAYS 5
+const uint8_t relaychs[] = {7, 8, 11, 12, 13};
+const uint8_t relaypins[] = {4, 5, 7, 8, 16};
+const bool relayinverted[] = {false, true, false, false, true};
 #define PixelCount 240
 
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(PixelCount, NEOPIN, NEO_GRB + NEO_KHZ800);
