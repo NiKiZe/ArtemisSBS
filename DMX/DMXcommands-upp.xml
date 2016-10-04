@@ -3,6 +3,7 @@
 	<!-- ********************************************************************************************* -->
 	<event type="ALWAYS_ON" continuous="yes">
 		<timeblock mseconds="1000">
+			<setvalue index="255" value="170" change="0"></setvalue>			<!-- intensity value of Checksum channel to avoid glitches -->
 			<setvalue index="12" value="0" change="0"></setvalue>			<!-- intensity value of Game Active -->
 		</timeblock>
 	</event>
