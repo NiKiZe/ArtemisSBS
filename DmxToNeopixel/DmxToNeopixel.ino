@@ -1,6 +1,10 @@
 #include <Adafruit_NeoPixel.h>
 #include <DMXSerial.h>
 
+// only use dmx data if this channel has this value
+#define CHK_CH 256
+#define CHK_VAL 0xAA
+
 #define BASE_CH 4 // 1 based DMX channel, max 512
 // but remember that Artemis DMX commands file is 0 based
 #define NEOPIN 6
@@ -70,6 +74,10 @@ void setup()
   Serial.begin(9600);
 }
 
+static bool DmxValid() {
+  return DMXSerial.read(CHK_CH) == CHK_VAL;
+}
+
 void loop()
 {
   // Calculate how long no data backet was received
@@ -77,6 +85,9 @@ void loop()
 
   static int lastOk = 1;
   if (lastPacket < 3000) {
+    // try to avoid glitches, only use dmx data if we have the correct checksum channel value
+    if (!DmxValid()) return;
+
     bool hasChange = lastOk != 0;
     lastOk = 0;
     uint32_t c = 0; //pixel color return ((uint32_t)r << 16) | ((uint32_t)g <<  8) | b;
@@ -92,6 +103,7 @@ void loop()
 
     for (int r = 0; r < RELAYS; r++) {
       bool nrelay = DMXSerial.read(relaychs[r]) != 0;
+      if (!DmxValid()) continue;
       SetRelay(r, nrelay);
     }
     if (hasChange) {
