@@ -31,6 +31,24 @@
 		</timeblock>
 	</event>
 	<!-- ********************************************************************************************* -->
+	<event type="WITHIN_NEBULA" continuous="yes">
+		<timeblock mseconds="1000" phase="entrance" fade="in">
+			<setvalue index="0" value="255" change="0"></setvalue>			<!-- red value of first light box -->
+			<setvalue index="1" value="255" change="-255"></setvalue>			<!-- green value of first light box -->
+			<setvalue index="2" value="255" change="0"></setvalue>			<!-- blue value of first light box -->
+		</timeblock>
+		<timeblock mseconds="1000">
+			<setvalue index="0" value="255" change="0"></setvalue>			<!-- red value of first light box -->
+			<setvalue index="1" value="0" change="0"></setvalue>			<!-- green value of first light box -->
+			<setvalue index="2" value="255" change="0"></setvalue>			<!-- blue value of first light box -->
+		</timeblock>
+		<timeblock mseconds="1000" phase="exit" fade="out">
+			<setvalue index="0" value="255" change="0"></setvalue>			<!-- red value of first light box -->
+			<setvalue index="1" value="0" change="255"></setvalue>			<!-- green value of first light box -->
+			<setvalue index="2" value="255" change="0"></setvalue>			<!-- blue value of first light box -->
+		</timeblock>
+	</event>
+	<!-- ********************************************************************************************* -->
 	<event type="GAME_PAUSED" continuous="yes">
 		<timeblock mseconds="500"></timeblock>
 		<timeblock mseconds="60000">
@@ -74,7 +92,7 @@
 			<setvalue index="2" value="200" change="0"></setvalue>			<!-- blue value of first light box -->
 			<setvalue index="3" value="0" change="0"></setvalue>			<!-- red value of neopx -->
 			<setvalue index="4" value="0" change="0"></setvalue>			<!-- green value of neopx -->
-			<setvalue index="5" value="127" change="0"></setvalue>			<!-- blue value of neopx -->
+			<setvalue index="5" value="31" change="-16"></setvalue>			<!-- blue value of neopx -->
 		</timeblock>
 	</event>
 	<!-- ********************************************************************************************* -->
@@ -84,8 +102,8 @@
 			<setvalue index="0" value="200" change="0"></setvalue>			<!-- red value of first light box -->
 			<setvalue index="1" value="200" change="0"></setvalue>			<!-- green value of first light box -->
 			<setvalue index="2" value="0" change="0"></setvalue>			<!-- blue value of first light box -->
-			<setvalue index="3" value="127" change="0"></setvalue>			<!-- red value of neopx -->
-			<setvalue index="4" value="127" change="0"></setvalue>			<!-- green value of neopx -->
+			<setvalue index="3" value="31" change="-16"></setvalue>			<!-- red value of neopx -->
+			<setvalue index="4" value="31" change="-16"></setvalue>			<!-- green value of neopx -->
 			<setvalue index="5" value="0" change="0"></setvalue>			<!-- blue value of neopx -->
 		</timeblock>
 	</event>
@@ -97,7 +115,7 @@
 			<setvalue index="1" value="200" change="0"></setvalue>			<!-- green value of first light box -->
 			<setvalue index="2" value="0" change="0"></setvalue>			<!-- blue value of first light box -->
 			<setvalue index="3" value="0" change="0"></setvalue>			<!-- red value of neopx -->
-			<setvalue index="4" value="127" change="0"></setvalue>			<!-- green value of neopx -->
+			<setvalue index="4" value="15" change="0"></setvalue>			<!-- green value of neopx -->
 			<setvalue index="5" value="0" change="0"></setvalue>			<!-- blue value of neopx -->
 		</timeblock>
 	</event>
