@@ -11,9 +11,9 @@
 	<event type="NORMAL_CONDITION_1" continuous="yes">
 		<!-- steady soft white light -->
 		<timeblock mseconds="1000">
-			<setvalue index="0" value="100" change="0"></setvalue>			<!-- red value of first light box -->
-			<setvalue index="1" value="100" change="0"></setvalue>			<!-- green value of first light box -->
-			<setvalue index="2" value="100" change="0"></setvalue>			<!-- blue value of first light box -->
+			<setvalue index="0" value="10" change="0"></setvalue>			<!-- red value of first light box -->
+			<setvalue index="1" value="10" change="0"></setvalue>			<!-- green value of first light box -->
+			<setvalue index="2" value="10" change="0"></setvalue>			<!-- blue value of first light box -->
 			<setvalue index="3" value="7" change="0"></setvalue>			<!-- red value of neopx -->
 			<setvalue index="4" value="7" change="0"></setvalue>			<!-- green value of neopx -->
 			<setvalue index="5" value="7" change="0"></setvalue>			<!-- blue value of neopx -->
@@ -89,7 +89,7 @@
 		<timeblock mseconds="1000">
 			<setvalue index="0" value="0" change="0"></setvalue>			<!-- red value of first light box -->
 			<setvalue index="1" value="0" change="0"></setvalue>			<!-- green value of first light box -->
-			<setvalue index="2" value="200" change="0"></setvalue>			<!-- blue value of first light box -->
+			<setvalue index="2" value="127" change="0"></setvalue>			<!-- blue value of first light box -->
 			<setvalue index="3" value="0" change="0"></setvalue>			<!-- red value of neopx -->
 			<setvalue index="4" value="0" change="0"></setvalue>			<!-- green value of neopx -->
 			<setvalue index="5" value="31" change="-16"></setvalue>			<!-- blue value of neopx -->
@@ -99,8 +99,8 @@
 	<event type="TRACTORED_FOR_DOCKED" continuous="yes">
 		<!-- steady yellow light -->
 		<timeblock mseconds="1000">
-			<setvalue index="0" value="200" change="0"></setvalue>			<!-- red value of first light box -->
-			<setvalue index="1" value="200" change="0"></setvalue>			<!-- green value of first light box -->
+			<setvalue index="0" value="127" change="0"></setvalue>			<!-- red value of first light box -->
+			<setvalue index="1" value="127" change="0"></setvalue>			<!-- green value of first light box -->
 			<setvalue index="2" value="0" change="0"></setvalue>			<!-- blue value of first light box -->
 			<setvalue index="3" value="31" change="-16"></setvalue>			<!-- red value of neopx -->
 			<setvalue index="4" value="31" change="-16"></setvalue>			<!-- green value of neopx -->
@@ -112,7 +112,7 @@
 		<!-- steady green light -->
 		<timeblock mseconds="1000">
 			<setvalue index="0" value="0" change="0"></setvalue>			<!-- red value of first light box -->
-			<setvalue index="1" value="200" change="0"></setvalue>			<!-- green value of first light box -->
+			<setvalue index="1" value="200" change="-73"></setvalue>			<!-- green value of first light box -->
 			<setvalue index="2" value="0" change="0"></setvalue>			<!-- blue value of first light box -->
 			<setvalue index="3" value="0" change="0"></setvalue>			<!-- red value of neopx -->
 			<setvalue index="4" value="15" change="0"></setvalue>			<!-- green value of neopx -->
@@ -278,14 +278,28 @@
 	<!-- ********************************************************************************************* -->
 	<event type="BEAM1_FIRED">
 		<!--Beam1-->
-		<timeblock mseconds="300">
+		<timeblock mseconds="500">
 			<setvalue index="10" value="255" change="0"></setvalue>			<!-- intensity value of Beam1 -->
 		</timeblock>
 	</event>
 	<!-- ********************************************************************************************* -->
 	<event type="BEAM2_FIRED">
 		<!--Beam2-->
-		<timeblock mseconds="300">
+		<timeblock mseconds="500">
+			<setvalue index="11" value="255" change="0"></setvalue>			<!-- intensity value of Beam2 -->
+		</timeblock>
+	</event>
+	<!-- ********************************************************************************************* -->
+	<event type="BEAM3_FIRED">
+		<!--Beam1-->
+		<timeblock mseconds="500">
+			<setvalue index="10" value="255" change="0"></setvalue>			<!-- intensity value of Beam1 -->
+		</timeblock>
+	</event>
+	<!-- ********************************************************************************************* -->
+	<event type="BEAM4_FIRED">
+		<!--Beam2-->
+		<timeblock mseconds="500">
 			<setvalue index="11" value="255" change="0"></setvalue>			<!-- intensity value of Beam2 -->
 		</timeblock>
 	</event>
