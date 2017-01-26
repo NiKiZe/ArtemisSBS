@@ -14,7 +14,7 @@ const uint8_t relaypins[] = {4, 5, 7, 8, 9};
 const bool relayinverted[] = {false, true, false, false, true};
 #define SetRelay(r, nrelay)     \
   if (oldrelay[r] != nrelay) {   \
-    Serial.println(String(millis()) + " relay ch " + String(relaychs[r]) + " change to " + String(nrelay ? "on" : "off"));  \
+    Serial.println(String(millis()) + " " + String(DMXSerial.noDataSince()) + "ms since DMX data  relay ch  " + String(relaychs[r]) + "  change to  " + String(nrelay ? "on" : "off"));  \
     digitalWrite(relaypins[r], nrelay == relayinverted[r] ? LOW : HIGH);  \
     oldrelay[r] = nrelay;  \
   }
