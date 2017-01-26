@@ -11,12 +11,12 @@
 #include <DMXSerial.h>
 
 #define BASE_CH 4 // 1 based DMX channel, max 512
-#define RELAY_BASE_CH 9
 #define NEOPIN 10
-#define RELAYS 2
+#define RELAYS 3
 #define SCANIDX 1
-const uint8_t relaypins[] = {16, 255};
-const bool relayinverted[] = {true};
+const uint8_t relaychs[] = {9, 0, 14};
+const uint8_t relaypins[] = {16, 255, 14};
+const bool relayinverted[] = {true, false, true};
 #define PixelCount 10
 
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(PixelCount, NEOPIN, NEO_GRB + NEO_KHZ800);
@@ -210,7 +210,7 @@ void readDMX() {
     unsigned long now = millis();
     static unsigned long lastrelay[RELAYS];
     for (int r = 0; r < RELAYS; r++) {
-      bool nrelay = DMXSerial.read(RELAY_BASE_CH + r) != 0;
+      bool nrelay = DMXSerial.read(relaychs[r]) != 0;
       if (oldrelay[r] != nrelay && now - lastrelay[r] > 50) {
         hasChange = true;
         Serial.println("relay " + String(r) + " change to " + String(nrelay ? "on" : "off") + " last " + String(now - lastrelay[r]));
