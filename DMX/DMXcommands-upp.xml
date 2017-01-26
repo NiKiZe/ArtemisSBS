@@ -266,7 +266,7 @@
 	<!-- ********************************************************************************************* -->
 	<event type="NUKE_READY_TO_FIRE">
 		<!--Audio nuke ready-->
-		<timeblock mseconds="2000">
+		<timeblock mseconds="600000">
 			<setvalue index="511" value="3" change="0"></setvalue>			<!-- play tadupd07 on audio -->
 		</timeblock>
 	</event>
@@ -310,6 +310,12 @@
 		<!--AutoBeam-->
 		<timeblock mseconds="1000">
 			<setvalue index="13" value="0" change="0"></setvalue>			<!-- intensity value of AutoBeams -->
+		</timeblock>
+	</event>
+	<!-- ********************************************************************************************* -->
+	<event type="WARP_4" continuous="yes">
+		<timeblock mseconds="1000">
+			<setvalue index="7" value="255" change="0"></setvalue>			<!-- intensity value of jump -->
 		</timeblock>
 	</event>
 </DMX_CONTROL>
