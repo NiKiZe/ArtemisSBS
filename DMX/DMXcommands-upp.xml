@@ -5,6 +5,7 @@
 		<timeblock mseconds="1000">
 			<setvalue index="255" value="170" change="0"></setvalue>			<!-- intensity value of Checksum channel to avoid glitches -->
 			<setvalue index="12" value="0" change="0"></setvalue>			<!-- intensity value of Game Active -->
+			<setvalue index="13" value="0" change="0"></setvalue>			<!-- intensity value of AutoBeams -->
 		</timeblock>
 	</event>
 	<!-- ********************************************************************************************* -->
@@ -25,6 +26,7 @@
 			<setvalue index="10" value="0" change="0"></setvalue>			<!-- intensity value of Beam1 -->
 			<setvalue index="11" value="0" change="0"></setvalue>			<!-- intensity value of Beam2 -->
 			<setvalue index="12" value="255" change="0"></setvalue>			<!-- intensity value of Game Active -->
+			<setvalue index="13" value="255" change="0"></setvalue>			<!-- intensity value of AutoBeams -->
 		</timeblock>
 		<timeblock mseconds="5000" phase="exit">
 			<setvalue index="12" value="255" change="0"></setvalue>			<!-- intensity value of Game Active -->
@@ -301,6 +303,13 @@
 		<!--Beam2-->
 		<timeblock mseconds="500">
 			<setvalue index="11" value="255" change="0"></setvalue>			<!-- intensity value of Beam2 -->
+		</timeblock>
+	</event>
+	<!-- ********************************************************************************************* -->
+	<event type="AUTO_BEAMS_ON" continuous="yes">
+		<!--AutoBeam-->
+		<timeblock mseconds="1000">
+			<setvalue index="13" value="0" change="0"></setvalue>			<!-- intensity value of AutoBeams -->
 		</timeblock>
 	</event>
 </DMX_CONTROL>
