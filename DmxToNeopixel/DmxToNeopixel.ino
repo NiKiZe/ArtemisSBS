@@ -10,7 +10,7 @@
 #define NEOPIN 6
 #define RELAYS 5
 const uint8_t relaychs[] = {7, 8, 11, 12, 13};
-const uint8_t relaypins[] = {4, 5, 7, 8, 16};
+const uint8_t relaypins[] = {4, 5, 7, 8, 9};
 const bool relayinverted[] = {false, true, false, false, true};
 #define SetRelay(r, nrelay)     \
   if (oldrelay[r] != nrelay) {   \
