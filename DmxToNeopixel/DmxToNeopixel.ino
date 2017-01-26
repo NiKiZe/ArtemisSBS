@@ -85,7 +85,7 @@ void loop()
 
   static int lastOk = 1;
   if (lastPacket < 3000) {
-    // try to avoid glitches, only use dmx data if we have the correct checksum channel value
+    // try to avoid glitches, only use dmx data if we have the correct checksum
     if (!DmxValid()) return;
 
     bool hasChange = lastOk != 0;
@@ -104,7 +104,13 @@ void loop()
     for (int r = 0; r < RELAYS; r++) {
       bool nrelay = DMXSerial.read(relaychs[r]) != 0;
       if (!DmxValid()) continue;
-      SetRelay(r, nrelay);
+      static bool glitchrelay[RELAYS];
+      // delay turn off but do quick on
+      if (nrelay || glitchrelay[r] == nrelay) {
+        SetRelay(r, nrelay);
+      } else {
+        glitchrelay[r] = nrelay;
+      }
     }
     if (hasChange) {
       strip.show();
