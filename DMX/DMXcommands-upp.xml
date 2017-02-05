@@ -278,6 +278,12 @@
 		</timeblock>
 	</event>
 	<!-- ********************************************************************************************* -->
+	<event type="JUST_KILLED_DAMCON_MEMBER">
+		<timeblock mseconds="1000">
+			<setvalue index="511" value="5" change="0"></setvalue>			<!-- play TCvDth00 on audio -->
+		</timeblock>
+	</event>
+	<!-- ********************************************************************************************* -->
 	<event type="BEAM1_FIRED">
 		<!--Beam1-->
 		<timeblock mseconds="500">

@@ -40,4 +40,5 @@
 	</profile>
 	<sound value="3" src="tadupd07.wav"></sound>
 	<sound value="4" src="tadupd04.wav"></sound>
+	<sound value="5" src="TCvDth00.wav"></sound>
 </DMX_DEVICES>
