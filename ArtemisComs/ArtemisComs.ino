@@ -32,12 +32,18 @@ const uint8_t pins[] = {2, 3, 4, 5, 6, 7, 8, 9};
  |   2    5    8   __
   \ / \  / \  / \ /
    1    4   6    9
+    \ /  \ /  \ /
+     .    .    .
+      \ /   \ /
+       .     .
+        \   /
+          R
 */
 const KeyboardKeycode kkmap[][4] = {
   {KEY_0, KEY_3, KEY_2, KEY_1},
   {KEY_7, KEY_5, KEY_4, KEY_PERIOD},
   {KEY_8, KEY_6, KEY_PERIOD, KEY_PERIOD},
-  {KEY_9, KEY_PERIOD, KEY_PERIOD, KEY_PERIOD},
+  {KEY_9, KEY_PERIOD, KEY_PERIOD, KEY_R},
 };
 
 void setup() {
