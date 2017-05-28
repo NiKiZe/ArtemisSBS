@@ -14,7 +14,7 @@
 #define NEOPIN 10
 #define RELAYS 3
 #define SCANIDX 1
-const uint8_t relaychs[] = {9, 0, 14};
+const uint8_t relaychs[] = {9, 10, 14};
 const uint8_t relaypins[] = {16, 255, 14};
 const bool relayinverted[] = {true, false, true};
 #define PixelCount 10
