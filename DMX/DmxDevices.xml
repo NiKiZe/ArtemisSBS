@@ -34,6 +34,9 @@
 		<inputDevice id="AutoBeams" channelCount="1" firstChannel="14">
 			<outputDevice type="dmx-1ch" param="14"></outputDevice>
 		</inputDevice>
+		<inputDevice id="PlayerHit" channelCount="1" firstChannel="15">
+			<outputDevice type="dmx-1ch" param="15"></outputDevice>
+		</inputDevice>
 		<inputDevice id="Checksum channel to avoid glitches" channelCount="1" firstChannel="256">
 			<outputDevice type="dmx-1ch" param="256"></outputDevice>
 		</inputDevice>

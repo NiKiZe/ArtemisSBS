@@ -12,11 +12,11 @@
 
 #define BASE_CH 4 // 1 based DMX channel, max 512
 #define NEOPIN 10
-#define RELAYS 3
+#define RELAYS 4
 #define SCANIDX 1
-const uint8_t relaychs[] = {9, 10, 14};
-const uint8_t relaypins[] = {16, 255, 14};
-const bool relayinverted[] = {true, false, true};
+const uint8_t relaychs[] = {9, 10, 14, 15};
+const uint8_t relaypins[] = {16, 255, 14, 15};
+const bool relayinverted[] = {true, false, true, true};
 #define PixelCount 10
 
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(PixelCount, NEOPIN, NEO_GRB + NEO_KHZ800);
