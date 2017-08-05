@@ -146,7 +146,7 @@ if __name__ == '__main__':
     oldHeatList = None
     # open the serial port that your arduino
     # is connected to.
-    ser = serial.Serial("COM5", 9600)
+    ser = serial.Serial("COM5", 115200)
 
     ctr = 0
 
@@ -156,6 +156,12 @@ if __name__ == '__main__':
     # -------- Main Program Loop -----------
     while not done:
         pygame.time.wait(1)
+
+        serbuf = b''
+        while ser.in_waiting > 0:
+            serbuf += ser.read()
+        if len(serbuf) > 0:
+            print(serbuf.decode())
 
         ctr += 1
         if ctr > 100 if DEBUG else 10:

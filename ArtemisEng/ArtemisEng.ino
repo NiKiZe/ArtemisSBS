@@ -84,7 +84,7 @@ void setup() {
   hstrip.show();
 
   // initialize serial communications at 9600 bps:
-  Serial.begin(9600);
+  Serial.begin(115200);
 
   for (int i = 0; i < ROWS; i++) {
     pinMode(ROWPINS[i], INPUT_PULLUP);
@@ -262,14 +262,14 @@ void loop() {
   static uint32_t lastpressed = 0;
   // debounce by only using state if it is the same state as last loop
   if (state == laststate && state != lastpressed) {
-    Serial.println(bin_string(state));
+    //Serial.println(bin_string(state));
     uint32_t change = lastpressed ^ state;
     for (int i = 0; i < SLIDERS; i++) {
       byte sample = state >> (0x4 * (SLIDERS - 1 - i)) & 0xf;
       byte changed = change >> (0x4 * (SLIDERS - 1 - i)) & 0xf;
       if (changed) {
         if (changed & B1000) {
-          Serial.println(" Cool " + String(i) + " down " + (sample & B1000 ? "pressed" : "released"));
+          //Serial.println(" Cool " + String(i) + " down " + (sample & B1000 ? "pressed" : "released"));
           if (sample & B1000) {
             setRefPos(X_COOL + X_SPACE * i, Y_COOLDOWN);
             AbsoluteMouse.click();
@@ -281,7 +281,7 @@ void loop() {
           changed ^= B1000;
         }
         if (changed & B0100) {
-          Serial.println(" Cool " + String(i) + " up " + (sample & B0100 ? "pressed" : "released"));
+          //Serial.println(" Cool " + String(i) + " up " + (sample & B0100 ? "pressed" : "released"));
           if (sample & B0100) {
             setRefPos(X_COOL + X_SPACE * i, Y_COOLUP);
             AbsoluteMouse.click();
@@ -293,33 +293,33 @@ void loop() {
           changed ^= B0100;
         }
         if (changed & B0001) {
-          Serial.println(" preset " + String(i + 1) + " " + (sample & B0001 ? "pressed" : "released"));
+          //Serial.println(" preset " + String(i + 1) + " " + (sample & B0001 ? "pressed" : "released"));
           key((KeyboardKeycode)(KEY_1 + i), sample & B0001);
           changed ^= B0001;
         }
         if (changed & B0010 && i >= 6 && i <= 7) {
-          Serial.println(" preset " + String(i + 2) + " " + (sample & B0010 ? "pressed" : "released"));
+          //Serial.println(" preset " + String(i + 2) + " " + (sample & B0010 ? "pressed" : "released"));
           key((KeyboardKeycode)(KEY_1 + i + 2), sample & B0010);
           changed ^= B0010;
         }
         if (changed & B0010 && i == 0) {
-          Serial.println(" shift " + String(sample & B0010 ? "pressed" : "released"));
+          //Serial.println(" shift " + String(sample & B0010 ? "pressed" : "released"));
           key(KEY_LEFT_SHIFT, sample & B0010);
           changed ^= B0010;
         }
         if (changed & B0010 && i == 4) {
-          Serial.println(" enter " + String(sample & B0010 ? "pressed" : "released"));
+          //Serial.println(" enter " + String(sample & B0010 ? "pressed" : "released"));
           key(KEY_ENTER, sample & B0010);
           changed ^= B0010;
           reset_coolant();
           hasChange = true;
         }
         if (changed & B0010 && i == 5) {
-          Serial.println(" space " + String(sample & B0010 ? "pressed" : "released"));
+          //Serial.println(" space " + String(sample & B0010 ? "pressed" : "released"));
           key(KEY_SPACE, sample & B0010);
           changed ^= B0010;
         }
-        if (changed) {
+        if (false && changed) {
           Serial.print(i);
           Serial.print("   ");
           Serial.print(changed, HEX);
@@ -337,17 +337,17 @@ void loop() {
 
   if (hasChange) {
     // print a timestamp followed by each sliders (current analog, last analog, and mapped) value
-    Serial.print(millis());
-    Serial.print("\t");
+    //Serial.print(millis());
+    //Serial.print("\t");
     for (int i = 0; i < SLIDERS; i++) {
-      Serial.print(sv[i]);
-      Serial.print("\t: ");
-      Serial.print(oVal[i]);
-      Serial.print("\t");
+      //Serial.print(sv[i]);
+      //Serial.print("\t: ");
+      //Serial.print(oVal[i]);
+      //Serial.print("\t");
       // update color of neopixel for strip
       cstrip.setPixelColor(i, cstrip.Color(map(oVal[i], POTMIN, POTMAX, 0, 8 * 16), 0, coolant[i] * 16));
     }
-    Serial.println();
+    //Serial.println();
     cstrip.show();
   }
 }
