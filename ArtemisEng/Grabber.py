@@ -25,6 +25,8 @@ import ctypes
 from pygame.locals import *
 user32 = ctypes.windll.user32
 
+heatisok = False
+
 def getHeat():      # This bit is written by Davr. It gets the overheat-level /Modded by Stugo
     bbox=(HEATX,HEATTOP,HEATX+HEATSPACE*(8-1)+1,HEATBOT)
     # grab interesting part of screen
@@ -36,6 +38,10 @@ def getHeat():      # This bit is written by Davr. It gets the overheat-level /M
                 screen.set_at((x,y), px[x,y])
         pygame.display.flip()
     heatList = [0]*8
+    # only care about old state if there is black between bar 1-2
+    b = px[int(HEATSPACE/3), 1]
+    global heatisok
+    heatisok = b == (0, 0, 0)
     for i in range(0,8): # loop over all 8 heat indicators
         # reset HeatHeight just in case it was calibrated
         HeatHeight = HEATBOT - HEATTOP
@@ -167,7 +173,7 @@ if __name__ == '__main__':
         if ctr > 100 if DEBUG else 10:
             heatList = getHeat()
             # if old value was 4-5 (HOT!) and new is 0 then it is probably due to flashing so ignore
-            if oldHeatList and not heatList == oldHeatList and len(heatList) == len(oldHeatList):
+            if heatisok and oldHeatList and not heatList == oldHeatList and len(heatList) == len(oldHeatList):
                 for i in range(0, len(heatList)):
                     if oldHeatList[i] >= 4 and heatList[i] == 0:
                         heatList[i] = oldHeatList[i]
