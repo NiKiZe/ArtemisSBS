@@ -1,3 +1,4 @@
+// Note that both are used for the 2 different versions of pixels
 #include <Adafruit_NeoPixel.h>
 #include "Adafruit_WS2801.h"
 
