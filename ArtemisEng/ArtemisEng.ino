@@ -44,9 +44,9 @@ const float refY = 32767 / (float)768;
 
 #define NEOPXPIN 0
 #define SLIDERS 8
-#define POTDETECT 16
-#define POTMIN 20
-#define POTMAX 920
+#define POTDETECT 20
+#define POTMIN 24
+#define POTMAX 916
 const uint8_t COLPINS[SLIDERS] = {2, 3, 4, 5, 6, 7, 8, 9};
 #define ROWS 4
 const uint8_t ROWPINS[ROWS] = {14, 15, 10, 16};
