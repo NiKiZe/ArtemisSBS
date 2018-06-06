@@ -152,7 +152,7 @@ if __name__ == '__main__':
     oldHeatList = None
     # open the serial port that your arduino
     # is connected to.
-    ser = serial.Serial("COM5", 115200)
+    ser = serial.Serial("COM5", 115200, timeout=1)
 
     ctr = 0
 
